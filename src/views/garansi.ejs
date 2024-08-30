@@ -1,0 +1,179 @@
+<%- include('template/template') %>
+<div class="container mx-auto">
+    <h1 class="text-2xl font-bold text-center">Garansi</h1>
+    <hr class="m-6">
+    <div class="flex justify-between items-center pl-6 pr-6">
+        <a href="#" class="bg-blue-500 text-white p-2 rounded font-bold invisible">Tambah</a>
+        <div>
+            <div class="my-2 flex sm:flex-row flex-col justify-end float-right">
+                <!-- Search Input -->
+                <div class="relative flex-grow mb-1 sm:mb-0 sm:mr-2">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+                        <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current text-gray-500">
+                            <path d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1114.32 4.906l5.387 5.387a1 1 0 01-1.414 1.414l-5.387-5.387A8 8 0 012 10z"></path>
+                        </svg>
+                    </span>
+                    <input placeholder="Cari Invoice"
+                        class="appearance-none rounded-l sm:rounded border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none" id="search"/>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-xs text-sm text-white rounded-md shadow-lg hidden" role="alert" id="messager">
+          <div class="flex p-4">
+            <span id="toast-message"></span>
+            <div class="ml-auto">
+              <button type="button" class="inline-flex flex-shrink-0 justify-center items-center h-4 w-4 rounded-md text-white/[.5] hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-800 focus:ring-red-500 transition-all text-sm ml-2" onclick="closeToast()">
+                <span class="sr-only">Close</span>
+                <svg class="w-3.5 h-3.5" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0.92524 0.687069C1.126 0.486219 1.39823 0.373377 1.68209 0.373377C1.96597 0.373377 2.2382 0.486219 2.43894 0.687069L8.10514 6.35813L13.7714 0.687069C13.8701 0.584748 13.9882 0.503105 14.1188 0.446962C14.2494 0.39082 14.3899 0.361248 14.5321 0.360026C14.6742 0.358783 14.8151 0.38589 14.9468 0.439762C15.0782 0.493633 15.1977 0.573197 15.2983 0.673783C15.3987 0.774389 15.4784 0.894026 15.5321 1.02568C15.5859 1.15736 15.6131 1.29845 15.6118 1.44071C15.6105 1.58297 15.5809 1.72357 15.5248 1.85428C15.4688 1.98499 15.3872 2.10324 15.2851 2.20206L9.61883 7.87312L15.2851 13.5441C15.4801 13.7462 15.588 14.0168 15.5854 14.2977C15.5831 14.5787 15.4705 14.8474 15.272 15.046C15.0735 15.2449 14.805 15.3574 14.5244 15.3599C14.2437 15.3623 13.9733 15.2543 13.7714 15.0591L8.10514 9.38812L2.43894 15.0591C2.23704 15.2543 1.96663 15.3623 1.68594 15.3599C1.40526 15.3574 1.13677 15.2449 0.938279 15.046C0.739807 14.8474 0.627232 14.5787 0.624791 14.2977C0.62235 14.0168 0.730236 13.7462 0.92524 13.5441L6.59144 7.87312L0.92524 2.20206C0.724562 2.00115 0.611816 1.72867 0.611816 1.44457C0.611816 1.16047 0.724562 0.887983 0.92524 0.687069Z" fill="currentColor"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="bg-white p-6">
+        <div class="overflow-x-auto border-x border-t">
+            <table class="table-auto w-full">
+                <thead class="border-b">
+                    <tr class="bg-gray-100">
+                        <th class="text-center p-4 font-medium">ID</th>
+                        <th class="text-center p-4 font-medium">Invoice</th>
+                        <th class="text-center p-4 font-medium">Customer</th>
+                        <th class="text-center p-4 font-medium">Tanggal Mulaik</th>
+                        <th class="text-center p-4 font-medium">Tanggal Berakhir</th>
+                        <th class="text-center p-4 font-medium">Status</th>
+                        <th class="text-center p-4 font-medium">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="customerstable">
+                    
+                </tbody>
+            </table>
+        </div>
+        <div id="pagination" class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
+           
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        searchCustomers('', 1);
+    })
+    async function searchCustomers(name, page) {
+        const response = await fetch(`/auth/warranty/wr?name=${encodeURIComponent(name)}&page=${page}`);
+        const data = await response.json();
+
+        // Clear the existing table rows
+        const tableBody = document.getElementById('customerstable');
+        tableBody.innerHTML = '';
+
+        // Update the table with new results
+        data.warranty.forEach((pnj, index) => {
+            const row = document.createElement('tr');
+            row.className = 'border-b hover:bg-gray-50';
+
+            row.innerHTML = `
+                <td class="p-4 text-center">${index + 1}</td>
+                <td class="p-4 text-center">${pnj.invoice}</td>
+                <td class="p-4 text-center">${pnj.customer}</td>
+                <td class="p-4 text-center">${formatDate(pnj.tanggal_mulai)}</td>
+                <td class="p-4 text-center">${formatDate(pnj.tanggal_berakhir)}</td>
+                <td class="p-4 text-center">${pnj.status}</td>
+                <td class="p-4 space-x-2 text-center">
+                    ${pnj.status != 'Dipakai' ? 
+                        `<button onclick="editListener('${pnj.id}')" class="bg-yellow-400 hover:bg-yellow-500 rounded p-1">
+                            Klaim
+                        </button>`
+                        : ''
+                    }
+                </td>
+            `;
+
+            tableBody.appendChild(row);
+        });
+        updatePagination(data.currentPage, data.totalPage);
+    }
+
+    function updatePagination(currentPage, totalPage) {
+        const paginationContainer = document.getElementById('pagination');
+        paginationContainer.innerHTML = '';
+
+        const span = document.createElement('span');
+        span.className = 'text-xs xs:text-sm text-gray-900';
+        span.textContent = `Showing page ${currentPage} of ${totalPage} page`;
+        paginationContainer.appendChild(span);
+
+        const paginationControls = document.createElement('div');
+        paginationControls.className = 'inline-flex mt-2 xs:mt-0 space-x-2';
+
+        if (currentPage > 1) {
+            const prevButton = document.createElement('a');
+            prevButton.href = '#';
+            prevButton.className = 'text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded';
+            prevButton.textContent = 'Prev';
+            prevButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                searchCustomers(document.getElementById('search').value, currentPage - 1);
+            });
+            paginationControls.appendChild(prevButton);
+        }
+
+        if (currentPage < totalPage) {
+            const nextButton = document.createElement('a');
+            nextButton.href = '#';
+            nextButton.className = 'text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded';
+            nextButton.textContent = 'Next';
+            nextButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                searchCustomers(document.getElementById('search').value, currentPage + 1);
+            });
+            paginationControls.appendChild(nextButton);
+        }
+
+        paginationContainer.appendChild(paginationControls);
+    }
+
+    function formatDate(datetimeString) {
+        if (!datetimeString) return 'Invalid Date'; // Handle null or undefined dates
+        
+        const date = new Date(datetimeString);
+
+        // Check if date is valid
+        if (isNaN(date.getTime())) {
+            console.error('Invalid date:', datetimeString);
+            return 'Invalid Date';
+        }
+
+        return date.toISOString().split('T')[0]; // Only date part (YYYY-MM-DD)
+    }
+
+    async function editListener(pembelianId) {
+        // console.log(pembelianId);
+        try {
+            const response = await fetch(`/auth/warranty/${pembelianId}`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                            });
+            const data = await response.json();
+            if (response.ok){
+                location.reload();
+            } else {
+                document.getElementById('toast-message').textContent = 'Error: ' + data.message;
+                document.getElementById('messager').classList.remove('hidden');
+                document.getElementById('messager').classList.add('bg-red-500');
+            }
+        } catch (error) {
+            document.getElementById('toast-message').textContent = 'Error: ' + error.message;
+            document.getElementById('messager').classList.remove('hidden');
+            document.getElementById('messager').classList.add('bg-red-500');   
+        }
+    }
+    const closeToast = () =>{
+        document.getElementById('messager').classList.add = 'hidden';
+    }
+</script>
+<%- include('template/footer') %>

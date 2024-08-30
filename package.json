@@ -1,0 +1,39 @@
+{
+  "name": "crm",
+  "version": "1.0.0",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx --watch electron .",
+    "rebuild": "electron-rebuild",
+    "package": "electron-packager . --overwrite --platform=win32 --arch=ia32,x64 --prune=true --out=release-builds"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MountZ1/crmdesktop.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MountZ1/crmdesktop/issues"
+  },
+  "homepage": "https://github.com/MountZ1/crmdesktop#readme",
+  "description": "",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.1.2",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "knex": "^3.1.0"
+  },
+  "packageManager": "yarn@1.22.21+sha1.1959a18351b811cdeedbd484a8f86c3cc3bbaf72",
+  "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "electron": "^31.3.0",
+    "electron-packager": "^17.1.2",
+    "electron-rebuild": "^3.2.9"
+  }
+}
