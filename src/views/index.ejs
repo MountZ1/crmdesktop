@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
+  <script src="https://cdn.tailwindcss.com"></script>
+=======
+  <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+  <link rel="stylesheet" href="/styles/output.css">
+>>>>>>> 7e5e88e (web only)
+</head>
+<body>
+  <section class="flex justify-center items-center h-screen bg-gray-100">
+    <div class="max-w-md w-full bg-white rounded-xl p-6 space-y-4">
+        <form class="space-y-4" id="login">
+          <div class="mb-4">
+              <p class="text-gray-600 text-center font-2xl">Sign In</p>
+              <p class="text-red-600 text-center font-2xl" id="error"></p>
+          </div>
+          <div>
+              <input class="w-full p-4 text-sm bg-gray-50 focus:outline-none border border-gray-200 rounded text-gray-600" type="text" placeholder="Username">
+          </div>
+          <div>
+              <input class="w-full p-4 text-sm bg-gray-50 focus:outline-none border border-gray-200 rounded text-gray-600" type="password" placeholder="Password">
+          </div>
+          <div class="pt-8">
+              <button class="w-full py-4 bg-blue-600 hover:bg-blue-700 rounded text-sm font-bold text-gray-50 transition duration-200" type="submit">Sign In</button>
+          </div>
+        </form>
+    </div>
+  </section>
+  <script>
+    const login = document.getElementById('login');
+    login.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const username = document.querySelector('input[type="text"]').value;
+      const password = document.querySelector('input[type="password"]').value;
+      fetch('/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username,
+          password
+        })
+      }).then(async (response) =>{
+        const res = await response.json();
+        if(res.redirect){
+          window.location.href = res.redirect;
+        }else{
+          document.getElementById('error').innerHTML = res.message;
+        }
+      })
+    });
+  </script>
+</body>
+</html>

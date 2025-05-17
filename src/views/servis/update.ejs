@@ -1,0 +1,777 @@
+<%- include('../template/template') %>
+<div class="container mx-auto w-full px-4">
+    <div class="text-sm text-white rounded-md shadow-lg hidden" role="alert" id="messager">
+        <div class="flex p-4">
+          <span id="toast-message" class="text-white"></span>
+          <div class="ml-auto">
+            <button type="button" class="inline-flex flex-shrink-0 justify-center items-center h-4 w-4 rounded-md text-white/[.5] hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-800 focus:ring-red-500 transition-all text-sm ml-2" onclick="closeToast()">
+              <span class="sr-only">Close</span>
+              <svg class="w-3.5 h-3.5" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0.92524 0.687069C1.126 0.486219 1.39823 0.373377 1.68209 0.373377C1.96597 0.373377 2.2382 0.486219 2.43894 0.687069L8.10514 6.35813L13.7714 0.687069C13.8701 0.584748 13.9882 0.503105 14.1188 0.446962C14.2494 0.39082 14.3899 0.361248 14.5321 0.360026C14.6742 0.358783 14.8151 0.38589 14.9468 0.439762C15.0782 0.493633 15.1977 0.573197 15.2983 0.673783C15.3987 0.774389 15.4784 0.894026 15.5321 1.02568C15.5859 1.15736 15.6131 1.29845 15.6118 1.44071C15.6105 1.58297 15.5809 1.72357 15.5248 1.85428C15.4688 1.98499 15.3872 2.10324 15.2851 2.20206L9.61883 7.87312L15.2851 13.5441C15.4801 13.7462 15.588 14.0168 15.5854 14.2977C15.5831 14.5787 15.4705 14.8474 15.272 15.046C15.0735 15.2449 14.805 15.3574 14.5244 15.3599C14.2437 15.3623 13.9733 15.2543 13.7714 15.0591L8.10514 9.38812L2.43894 15.0591C2.23704 15.2543 1.96663 15.3623 1.68594 15.3599C1.40526 15.3574 1.13677 15.2449 0.938279 15.046C0.739807 14.8474 0.627232 14.5787 0.624791 14.2977C0.62235 14.0168 0.730236 13.7462 0.92524 13.5441L6.59144 7.87312L0.92524 2.20206C0.724562 2.00115 0.611816 1.72867 0.611816 1.44457C0.611816 1.16047 0.724562 0.887983 0.92524 0.687069Z" fill="currentColor"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow-md border mt-4 mb-8">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold">Transaksi Servis</h2>
+        </div>
+        <div class="bg-white rounded-lg shadow-md border mt-4 px-6">
+            <div class="flex p-2">
+                <div class="w-1/2 pr-1">
+                    <label class="text-sm text-gray-600 mb-1 block">Nama</label>
+                    <input type="text" class="border p-2 rounded-md w-full" placeholder="Nama" id="customer_nama" disabled>
+                </div>
+                <div class="w-1/2 pl-1">
+                    <label class="text-sm text-gray-600 mb-1 block">No.Telp</label>
+                    <input type="text" class="border p-2 rounded-md w-full" placeholder="No.Telp" id="customer_no_telp" disabled>
+                </div>
+            </div>
+        </div>
+        <!-- Store perbaikan -->
+        <div class="bg-white px-6 pb-4 rounded-lg shadow-md border mt-4">
+            <input type="hidden" id="sales_id">
+            <div class="flex items-center justify-between p-2 border-b">
+                <span class="text-lg font-semibold">Servis Data</span>
+            </div>
+            <div class="p-2 space-y-4 mb-4">
+                <div class="w-full">
+                    <label class="text-sm text-gray-600 mb-1 block">Device</label>
+                    <input type="text" class="border p-2 rounded-md w-full" placeholder="Device" id="device">
+                </div>
+                <div class="flex space-x-2">
+                    <div class="w-1/2">
+                        <label class="text-sm text-gray-600 mb-1 block">Deskripsi</label>
+                        <input type="text" class="border p-2 rounded-md w-full" placeholder="Deskripsi" id="deskripsi">
+                    </div>
+                    <div class="w-1/2">
+                        <label class="text-sm text-gray-600 mb-1 block">Harga</label>
+<<<<<<< HEAD
+                        <input type="text" class="border p-2 rounded-md w-full" placeholder="Harga" id="harga_servis">
+=======
+                        <input type="text" class="border p-2 rounded-md w-full" placeholder="Harga" id="harga_servis" oninput="this.value = formatDaNumber(this.value)">
+>>>>>>> 7e5e88e (web only)
+                    </div>
+                </div>
+                <button class="px-4 py-2 bg-blue-500 text-white rounded-md w-full" onclick="addPerbaikan()">Simpan Detail</button>
+            </div>
+            <table class="min-w-full bg-white mb-6 mt-4">
+                <thead>
+                    <tr>
+                        <th class="py-2 px-4 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No.</th>
+                        <th class="py-2 px-4 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
+                        <th class="py-2 px-4 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Harga</th>
+                        <th class="py-2 px-4 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="perbaikan">
+                    <!-- Rows will be populated by JavaScript -->
+                </tbody>
+            </table>
+            <div class="border-b border"></div>
+            <div class="mt-6 flex flex-wrap justify-between">
+                <!-- Right Section - Total and Payment -->
+                <div class="flex flex-col space-y-4 items-end ml-auto">
+                    <div class="flex justify-between w-full">
+                        <div class="text-sm text-gray-500 w-1/2">Total:</div>
+                        <div class="text-sm font-bold text-gray-900 w-1/2 text-right" id="totalservis"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Store Component needed -->
+        <div class="bg-white px-6 pb-4 rounded-lg shadow-md border mt-4">
+            <div class="flex items-center justify-between p-2 border-b">
+                <span class="text-lg font-semibold">Data Komponen</span>
+            </div>
+            <div class="mb-4">
+                <div class="flex items-center justify-between">
+                    <label for="invoice" class="text-sm font-medium text-gray-700"></label>
+                    <div class="px-4 py-2 space-x-2 flex">
+                        <div class="">
+                            <input type="text" id="search_nama" name="invoice" class="w-64 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ml-2" placeholder="cari dengan nama">
+                            <div id="componentOptions" class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg hidden max-h-60 overflow-y-auto max-w-fit">
+                                <!-- Options will be inserted here -->
+                            </div>
+                        </div>
+                        <div class="">
+                            <input type="text" id="search_kd" name="invoice" class="w-64 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ml-2" placeholder="cari dengan kode">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="w-full border-t-2 border-gray-300 my-4">
+            <table class="min-w-full bg-white mb-6">
+                <thead>
+                    <tr>
+                        <th class="py-2 px-4 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No.</th>
+                        <th class="py-2 px-4 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                        <th class="py-2 px-4 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Harga</th>
+                        <th class="py-2 px-4 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">QTY</th>
+                        <th class="py-2 px-4 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sub Total</th>
+                        <th class="py-2 px-4 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="storedItemsTableBody">
+                    <!-- Rows will be populated by JavaScript -->
+                </tbody>
+            </table>
+            <div class="border-b border"></div>
+            <div class="mt-6 flex flex-wrap justify-between">
+                <!-- Right Section - Total and Payment -->
+                <div class="flex flex-col space-y-4 items-end ml-auto">
+                    <div class="flex justify-between w-full">
+                        <div class="text-sm text-gray-500 w-1/2">Total:</div>
+                        <div class="text-sm font-bold text-gray-900 w-1/2 text-right" id="totalkomponen"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Save button outside the payment section -->
+        <div class="mt-6 flex flex-wrap justify-end items-end ml-auto">
+            <div class="flex flex-col space-y-4 w-full md:w-auto"> <!-- Adjusted w-full to md:w-auto for responsive layout -->
+                <div class="flex justify-between items-center">
+                    <div class="text-sm text-red-500">Total: <span class="font-bold ml-2" id="total"></span></div>
+                </div>
+                <div class="flex justify-between w-full md:w-auto"> 
+                    <div class="text-sm text-red-500">Terbayar: <span class="font-bold ml-2" id="terbayar"></span></div>
+                </div>
+                <div class="flex justify-between w-full md:w-auto"> 
+                    <div class="text-sm text-red-500">Terutang: <span class="font-bold ml-2" id="terutang"></span></div>
+                </div>
+            </div>
+        </div>
+           
+        <div class="mt-4">
+            <button class="px-4 py-2 bg-blue-500 text-white rounded w-full" onclick="savePembelian()">Simpan Payment</button>
+        </div>
+    </div>
+    
+    
+    <!-- Modal Structure -->
+    <div id="barangModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-lg shadow-lg w-full max-w-screen-lg max-h-[calc(100vh-100px)] overflow-hidden">
+            <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-lg font-semibold">Barang</h3>
+                <button id="closeModal" class="text-gray-600 hover:text-gray-900">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-4 overflow-y-auto max-h-[calc(100vh-200px)]">
+                <table class="min-w-full bg-white">
+                    <thead class="border">
+                        <tr class="bg-gray-100">
+                            <th class="text-center p-4 font-medium">ID</th>
+                            <th class="text-center p-4 font-medium">Name</th>
+                            <th class="text-center p-4 font-medium">NO. Telp</th>
+                            <th class="text-center p-4 font-medium">Total Servis</th>
+                            <th class="text-center p-4 font-medium">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="custtable">
+                        <!-- Table rows will be populated here -->
+                    </tbody>
+                </table>
+                <div id="pagination" class="block text-xs xs:text-sm text-gray-900">
+                    <!-- Pagination controls will be here -->
+                </div>
+            </div>
+        </div>
+    </div>     
+
+</div>
+
+<script>
+    const customerName = document.getElementById('customer_nama');
+    const customerPhone = document.getElementById('customer_no_telp');
+    const deskripsi = document.getElementById('deskripsi');
+    const harga_servis = document.getElementById('harga_servis');
+    const toalServer = document.getElementById('terbayar');
+
+     const closeToast = () =>{
+        document.getElementById('messager').style.display = 'none';
+    }
+
+    function getID(){
+        const pathParts = window.location.pathname.split('/');
+        const id = pathParts[pathParts.length - 1];
+        return id
+    }
+    async function fetchServis(){
+        const id = getID();
+        const response = await fetch(`/auth/servis/${id}`);
+        const data = await response.json();
+        customerName.value = data.customer
+        customerPhone.value = data.customer_no_telp
+        document.getElementById('device').value = data.device
+        data.servis.forEach(cmp => {
+            console.log(cmp);
+            storePerbaikan(cmp.masalah, cmp.biaya)
+        });
+        data.items.forEach(cmp => {
+            selectItem(cmp.id, cmp.komponen, cmp.jumlah, cmp.harga)
+        })
+<<<<<<< HEAD
+        document.getElementById('terbayar').textContent = data.bayar || 0;
+=======
+        document.getElementById('terbayar').textContent = formatDaNumber(data.bayar) || 0;
+>>>>>>> 7e5e88e (web only)
+        document.getElementById('sales_id').value = id;
+        updateGrandTotal();
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchServis();
+        fetchSuppliers();
+        const barangButton = document.getElementById('btnCustomer') // Adjust selector if needed
+        const modal = document.getElementById('barangModal');
+        const closeModal = document.getElementById('closeModal');
+
+        // barangButton.addEventListener('click', () => {
+        //     modal.classList.remove('hidden');
+        //     searchCustomers('', 1); // Fetch data for the first page
+        // });
+
+        closeModal.addEventListener('click', () => {
+            modal.classList.add('hidden');
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+            }
+        });
+    });
+    async function searchCustomers(name, page) {
+        const response = await fetch(`/auth/customers/cust?name=${encodeURIComponent(name)}&page=${page}`);
+        const data = await response.json();
+
+        const tableBody = document.getElementById('custtable');
+        tableBody.innerHTML = '';
+
+        // Update the table with new results
+        data.customers.forEach(cmp => {
+            const row = document.createElement('tr');
+            row.className = 'border-b hover:bg-gray-50';
+
+            row.innerHTML = `
+                <td class="p-4 text-center">${cmp.id}</td>
+                <td class="p-4 text-center">${cmp.name}</td>
+                <td class="p-4 text-center">${cmp.no_telp}</td>
+                <td class="p-4 text-center">${cmp.total_service}</td>
+                <td class="p-4 text-center">
+                    <button class="bg-green-500 hover:bg-green-600 text-white rounded px-3 py-1" onclick="fillCustomerForm('${cmp.name}', '${cmp.no_telp}')">
+                        Pilih
+                    </button>
+                </td>
+            `;
+
+            tableBody.appendChild(row);
+        });
+
+        // Update pagination
+        updatePagination(data.currentPage, data.totalPage);
+    }
+
+    function fillCustomerForm(name, phone){
+        customerName.value = name;
+        customerPhone.value = phone;
+        document.getElementById('barangModal').classList.add('hidden');
+    }
+
+    function updatePagination(currentPage, totalPage) {
+        const paginationContainer = document.getElementById('pagination');
+        paginationContainer.innerHTML = '';
+
+        const span = document.createElement('span');
+        span.className = 'text-xs xs:text-sm text-gray-900 text-center';
+        span.textContent = `Showing page ${currentPage} of ${totalPage} page`;
+        paginationContainer.appendChild(span);
+
+        const paginationControls = document.createElement('div');
+        paginationControls.className = 'inline-flex mt-2 xs:mt-0 space-x-2 justify-center items-center';
+
+        if (currentPage > 1) {
+            const prevButton = document.createElement('a');
+            prevButton.href = '#';
+            prevButton.className = 'text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded';
+            prevButton.textContent = 'Prev';
+            prevButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                searchCustomers('', currentPage - 1);
+            });
+            paginationControls.appendChild(prevButton);
+        }
+
+        if (currentPage < totalPage) {
+            const nextButton = document.createElement('a');
+            nextButton.href = '#';
+            nextButton.className = 'text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded';
+            nextButton.textContent = 'Next';
+            nextButton.addEventListener('click', (e) => {
+                console.log('Next button clicked');
+                e.preventDefault();
+                searchCustomers('', currentPage + 1);
+            });
+            paginationControls.appendChild(nextButton);
+        }
+
+        paginationContainer.appendChild(paginationControls);
+    }
+
+    function updateItem(event) {
+        const input = event.target;
+        const id = input.dataset.id;
+        const isHarga = input.classList.contains('harga-input');
+        const value = parseFloat(input.value) || 0;
+
+        const storedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
+        const itemIndex = storedItems.findIndex(item => item.id === id);
+
+        if (itemIndex !== -1) {
+            if (isHarga) {
+                storedItems[itemIndex].harga = value;
+            } else {
+                storedItems[itemIndex].quantity = value;
+            }
+
+            // Update localStorage
+            localStorage.setItem('selectedItems', JSON.stringify(storedItems));
+
+            // Update subtotal
+            const harga = parseFloat(document.querySelector(`.harga-input[data-id="${id}"]`).value) || 0;
+            const quantity = parseFloat(document.querySelector(`.quantity-input[data-id="${id}"]`).value) || 0;
+            const subtotal = harga * quantity;
+            document.querySelector(`.subtotal[data-id="${id}"]`).textContent = subtotal.toFixed(2);
+
+            // Update total (if needed)
+            updateTotal();
+            updateGrandTotal();
+        }
+    }
+
+    function updateGrandTotal() {
+<<<<<<< HEAD
+        const total_service = parseFloat(document.getElementById('totalservis').textContent) || 0;
+        const total_komponens = parseFloat(document.getElementById('totalkomponen').textContent) || 0;
+        const total = total_service + total_komponens;
+        const toalServer = parseFloat(document.getElementById('terbayar').textContent);
+        document.getElementById('terutang').textContent = (toalServer - total) || 0;
+        document.getElementById('total').textContent = total; // Use toFixed to ensure consistency
+=======
+        const total_service = parseFloat(turnBackDaNumber(document.getElementById('totalservis').textContent)) || 0;
+        const total_komponens = parseFloat(turnBackDaNumber(document.getElementById('totalkomponen').textContent)) || 0;
+        const total = total_service + total_komponens;
+        const toalServer = parseFloat(turnBackDaNumber(document.getElementById('terbayar').textContent));
+        const theGrandTotal = toalServer - total || 0;
+        
+        if (theGrandTotal < 0){
+            document.getElementById('terutang').textContent = formatDaNumber(theGrandTotal);
+        } else{
+            document.getElementById('terutang').textContent = 0;
+        }
+        document.getElementById('total').textContent = formatDaNumber(total); // Use toFixed to ensure consistency
+>>>>>>> 7e5e88e (web only)
+    }
+
+    function deleteItem(id) {
+        const storedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
+        const updatedItems = storedItems.filter(item => item.id !== id);
+
+        localStorage.setItem('selectedItems', JSON.stringify(updatedItems));
+        renderStoredItems();
+    }
+
+    // Call this function on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        renderStoredItems();
+        updateTotal();
+        updateGrandTotal();
+    });
+
+    const savePembelian = async () => {
+        const selectedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
+        const servis = JSON.parse(localStorage.getItem('servis')) || [];
+<<<<<<< HEAD
+        const terutang = parseFloat(document.getElementById('terutang').textContent);
+        const total = parseFloat(document.getElementById('total').textContent);
+=======
+        const terutang = parseFloat(turnBackDaNumber(document.getElementById('terutang').textContent));
+        const total = parseFloat(turnBackDaNumber(document.getElementById('total').textContent));
+>>>>>>> 7e5e88e (web only)
+        const id = getID();
+
+        if (servis.length === 0) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+
+        const requestData = {
+            total: total,
+            terutang: terutang * -1,
+            items: selectedItems.map(item => ({
+                komponen_id: item.id,
+                qty: item.quantity,
+                harga_satuan: item.harga
+            })),
+            servis: servis.map(srv => ({
+                masalah: srv.deskripsi,
+                biaya: srv.harga
+            }))
+        };
+
+        const response = await fetch(`/auth/servis/edit/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData)
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        } else {
+            window.location.href = '/auth/servis';
+        }
+
+        const result = await response.json();
+        console.log('Server Response:', result);
+
+<<<<<<< HEAD
+        alert(result.message);
+=======
+        // alert(result.message);
+>>>>>>> 7e5e88e (web only)
+
+        localStorage.removeItem('selectedItems');
+        document.getElementById('invoice').value = '';
+        renderStoredItems();
+        updateTotal();
+        updateGrandTotal();
+    }
+
+    const total = document.getElementById('total');
+    const kd = document.getElementById('search_kd');
+    
+    kd.addEventListener('keydown', async (event) => {
+        if (event.key === 'Tab'){
+            event.preventDefault();
+            kd.focus();
+        }
+
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            const data = await searchbyKd(kd.value);
+            if(data.length > 0){
+                selectItem(data[0].id, data[0].name, 1, data[0].sell_price);
+                document.getElementById('search_kd').value = '';
+            }
+        }
+    })
+
+    document.getElementById('search_nama').addEventListener('input', async () => {
+        const name = document.getElementById('search_nama').value;
+        if(name.length = 0){
+            options.innerHTML = '';
+            options.classList.add('hidden');
+            return
+        }
+        const components = await searchComponents(name);
+
+        const options = document.getElementById('componentOptions');
+        options.innerHTML = '';
+        if (components.length > 0) {
+            components.forEach(component => {
+                const option = document.createElement('div');
+                option.textContent = `${component.name} (${component.kd_barang})`;
+                option.className = 'ml-2 px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm w-64';
+                option.addEventListener('click', () => {
+                    selectItem(component.id, component.name, 1, component.sell_price);
+                    options.innerHTML = '';
+                    options.classList.add('hidden');
+                    document.getElementById('search_nama').value = '';
+                });
+                options.appendChild(option);
+            });
+            options.classList.remove('hidden');
+        } else {
+            options.classList.add('hidden');
+        }
+    });
+
+    document.addEventListener('click', function(event) {
+        const options = document.getElementById('componentOptions');
+        const searchInput = document.getElementById('search_nama');
+        
+        // Periksa apakah klik terjadi di luar options dan search input
+        if (!options.contains(event.target) && event.target !== searchInput) {
+            options.innerHTML = '';
+            options.classList.add('hidden');
+            searchInput.value = '';
+        }
+    })
+
+    async function searchbyKd(kd){
+        const response = await fetch(`/auth/components/searchkd/${kd}`);
+        const data = await response.json();
+        if (data.length < 1) {
+            document.getElementById('messager').classList.remove('hidden');
+            document.getElementById('messager').classList.add('bg-red-500');
+            document.getElementById('toast-message').innerHTML = 'Data tidak ditemukan';
+        }
+        return data
+    }
+
+    async function searchComponents(name){
+        const response = await fetch(`/auth/components/search/${name}`);
+        const data = await response.json();
+        return data
+    }
+
+    function selectItem(id, name, jumlah, harga) {
+        const itemSaved = JSON.parse(localStorage.getItem('selectedItems')) || [];
+        const ifExist = itemSaved.find(item => item.id === id);
+        if (ifExist) {
+            updateQuantity(id, 1);
+        } else {
+            const item = {
+                id,
+                name,
+                quantity:jumlah,
+                harga,
+            };
+            const storedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
+            storedItems.push(item);
+            localStorage.setItem('selectedItems', JSON.stringify(storedItems));
+        }
+
+        renderStoredItems();
+    }
+
+    function updateQuantity(id, quantityChange) {
+        const storedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
+        const updatedItems = storedItems.map(item => {
+            if (item.id === id) {
+                // Ensure we're working with numbers
+                const currentQuantity = parseInt(item.quantity, 10);
+                const change = parseInt(quantityChange, 10);
+                
+                // Calculate new quantity, ensuring it doesn't go below 1
+                const newQuantity = Math.max(1, currentQuantity + change);
+                
+                return { ...item, quantity: newQuantity };
+            }
+            return item;
+        });
+        
+        localStorage.setItem('selectedItems', JSON.stringify(updatedItems));
+        renderStoredItems();
+    }
+
+    function renderStoredItems() {
+        const storedItemsTableBody = document.getElementById('storedItemsTableBody');
+        const storedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
+
+        // Clear existing rows
+        storedItemsTableBody.innerHTML = '';
+
+        storedItems.forEach((item, index) => {
+            const row = document.createElement('tr');
+            row.className = 'border-b hover:bg-gray-50';
+
+<<<<<<< HEAD
+            row.innerHTML = `
+                <td class="py-2 px-4 border-t border-gray-200">${index + 1}</td>
+                <td class="py-2 px-4 border-t border-gray-200">${item.name}</td>
+                <td class="py-2 px-4 border-t border-gray-200">${item.harga}</td>
+                <td class="py-2 px-4 border-t border-gray-200">${item.quantity}</td>
+                <td class="py-2 px-4 border-t border-gray-200">
+                    <span class="subtotal" data-id="${item.id}">${item.harga * item.quantity}</span>
+=======
+            const harga = parseFloat(item.harga) || 0; // Default to 0 if not a number
+            const quantity = parseInt(item.quantity, 10) || 0; // Default to 0 if not a number
+            const subtotal = harga * quantity;
+
+            row.innerHTML = `
+                <td class="py-2 px-4 border-t border-gray-200">${index + 1}</td>
+                <td class="py-2 px-4 border-t border-gray-200">${item.name}</td>
+                <td class="py-2 px-4 border-t border-gray-200">${formatDaNumber(harga)}</td>
+                <td class="py-2 px-4 border-t border-gray-200">${quantity}</td>
+                <td class="py-2 px-4 border-t border-gray-200">
+                    <span class="subtotal" data-id="${item.id}">${formatDaNumber(subtotal)}</span>
+>>>>>>> 7e5e88e (web only)
+                </td>
+                <td class="py-2 px-4 border-t border-gray-200 space-y-2">
+                    <div class="flex space-x-2">
+                        <button class="decrease-btn px-2 py-1 bg-blue-400 text-white rounded w-6" data-id="${item.id}">-</button>
+                        <button class="increase-btn px-2 py-1 bg-blue-400 text-white rounded w-6" data-id="${item.id}">+</button>
+                    </div>
+                    <button class="delete-btn px-2 py-1 bg-red-500 text-white rounded" data-id="${item.id}" id="deletecomp-btn">Delete</button>
+                </td>
+            `;
+
+            storedItemsTableBody.appendChild(row);
+            row.querySelector('.decrease-btn').addEventListener('click', () => updateQuantity(item.id, -1));
+            row.querySelector('.increase-btn').addEventListener('click', () => updateQuantity(item.id, 1));
+            row.querySelector('#deletecomp-btn').addEventListener('click', () => deleteItem(item.id, 'selectedItems'));
+        });
+
+        updateTotal();
+        updateGrandTotal();
+    }
+
+    function updateTotal() {
+        const subtotals = document.querySelectorAll('.subtotal');
+<<<<<<< HEAD
+        const total = Array.from(subtotals).reduce((sum, subtotal) => sum + parseFloat(subtotal.textContent), 0);
+        document.getElementById('totalkomponen').textContent = total;
+=======
+        const total = Array.from(subtotals).reduce((sum, subtotal) => sum + parseFloat(turnBackDaNumber(subtotal.textContent)), 0);
+        document.getElementById('totalkomponen').textContent = formatDaNumber(total);
+>>>>>>> 7e5e88e (web only)
+    }
+
+    function deleteItem(id, storage) {
+        const storedItems = JSON.parse(localStorage.getItem(storage)) || [];
+        const updatedItems = storedItems.filter(item => item.id !== id);
+
+        localStorage.setItem(storage, JSON.stringify(updatedItems));
+        renderStoredItems();
+    }
+
+    function addPerbaikan() {
+        const storedItems = JSON.parse(localStorage.getItem('servis')) || [];
+        
+        if (!deskripsi.value || !harga_servis.value) {
+            document.getElementById('messager').classList.add('bg-red-500');
+            document.getElementById('messager').classList.remove('hidden');
+            document.getElementById('toast-message').textContent = 'Deskripsi dan Harga harus diisi';
+            return;
+        }
+
+        // Generate a unique ID based on the highest existing ID
+        const id = storedItems.length > 0 ? Math.max(...storedItems.map(item => item.id)) + 1 : 1;
+
+        const servis = {
+            id: id,
+            deskripsi: deskripsi.value,
+<<<<<<< HEAD
+            harga: harga_servis.value
+=======
+            harga: turnBackDaNumber(harga_servis.value)
+>>>>>>> 7e5e88e (web only)
+        }
+        
+        storedItems.push(servis);
+        localStorage.setItem('servis', JSON.stringify(storedItems));
+        deskripsi.value = '';
+        harga_servis.value = '';
+        renderPerbaikan();
+    }
+
+    function storePerbaikan(deskripsi, harga) {
+        const storedItems = JSON.parse(localStorage.getItem('servis')) || [];
+        const id = storedItems.length + 1;
+        const servis = {
+            id: id,
+            deskripsi: deskripsi,
+            harga: harga
+        }
+
+        window.addEventListener('beforeunload', () => {
+            localStorage.removeItem('servis')
+        })
+        storedItems.push(servis);
+        localStorage.setItem('servis', JSON.stringify(storedItems));
+        renderPerbaikan();
+    }
+
+    function deletePerbaikan(id) {
+        const storedItems = JSON.parse(localStorage.getItem('servis')) || [];
+        const updatedItems = storedItems.filter(item => item.id !== id);
+        localStorage.setItem('servis', JSON.stringify(updatedItems));
+        renderPerbaikan();
+    }
+
+    function renderPerbaikan() {
+        const storedItemsTableBody = document.getElementById('perbaikan');
+        const storedItems = JSON.parse(localStorage.getItem('servis')) || [];
+
+        // Clear existing rows
+        storedItemsTableBody.innerHTML = '';
+
+        storedItems.forEach((item, index) => {
+            const row = document.createElement('tr');
+            row.className = 'border-b hover:bg-gray-50';
+
+            row.innerHTML = `
+                <td class="py-2 px-4 border-t border-gray-200">${index + 1}</td>
+                <td class="py-2 px-4 border-t border-gray-200">${item.deskripsi}</td>
+<<<<<<< HEAD
+                <td class="py-2 px-4 border-t border-gray-200">${item.harga}</td>
+=======
+                <td class="py-2 px-4 border-t border-gray-200">${formatDaNumber(item.harga)}</td>
+>>>>>>> 7e5e88e (web only)
+                <td class="py-2 px-4 border-t border-gray-200">
+                    <button class="px-2 py-1 bg-red-500 text-white rounded" data-id="${item.id}" id="deleteperbaikan-btn">Delete</button>
+                </td>
+            `;
+
+            storedItemsTableBody.appendChild(row);
+            row.querySelector('#deleteperbaikan-btn').addEventListener('click', () => deletePerbaikan(item.id));
+        });
+
+<<<<<<< HEAD
+        document.getElementById('totalservis').textContent = storedItems.reduce((sum, item) => sum + parseFloat(item.harga), 0);
+=======
+         const total = storedItems.reduce((sum, item) => {
+           const harga = parseFloat(item.harga) || 0;
+           return sum + harga; 
+          }, 0);
+
+        document.getElementById('totalservis').textContent = formatDaNumber(total);
+        
+>>>>>>> 7e5e88e (web only)
+        updateGrandTotal();
+    }
+
+    // document.getElementById('bayar').addEventListener('input', () => {
+    //     const bayar = parseFloat(document.getElementById('bayar').value);
+    //     const total = parseFloat(document.getElementById('total').textContent);
+    //     const kembalian = bayar - total;
+    //     if (kembalian >= 0) {
+    //         document.getElementById('kembali').textContent = kembalian;
+    //     }
+    // });
+
+    window.addEventListener('beforeunload', () => {
+        localStorage.removeItem('servis')
+        localStorage.removeItem('selectedItems');
+    });
+
+<<<<<<< HEAD
+=======
+    function formatDaNumber(price){
+      if (typeof price === 'number') {
+        return Intl.NumberFormat('id-ID').format(price);
+      }
+
+      let val = price.replace(/\D/g, '')
+      return Intl.NumberFormat('id-ID').format(val);
+    }
+
+    function turnBackDaNumber(price){
+      const rawValue = price.replace(/\./g, '');
+      const finalPrice = parseInt(rawValue, 10);
+
+      return finalPrice;
+    }
+
+>>>>>>> 7e5e88e (web only)
+</script>
+
+<%- include('../template/footer') %>

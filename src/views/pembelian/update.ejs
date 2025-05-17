@@ -1,0 +1,480 @@
+<%- include('../template/template') %>
+<div class="container mx-auto w-full px-4">
+    <div class="max-w-xs text-sm text-white rounded-md shadow-lg hidden" role="alert" id="messager">
+        <div class="flex p-4">
+          <span id="toast-message"></span>
+          <div class="ml-auto">
+            <button type="button" class="inline-flex flex-shrink-0 justify-center items-center h-4 w-4 rounded-md text-white/[.5] hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-800 focus:ring-red-500 transition-all text-sm ml-2" onclick="closeToast()">
+              <span class="sr-only">Close</span>
+              <svg class="w-3.5 h-3.5" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0.92524 0.687069C1.126 0.486219 1.39823 0.373377 1.68209 0.373377C1.96597 0.373377 2.2382 0.486219 2.43894 0.687069L8.10514 6.35813L13.7714 0.687069C13.8701 0.584748 13.9882 0.503105 14.1188 0.446962C14.2494 0.39082 14.3899 0.361248 14.5321 0.360026C14.6742 0.358783 14.8151 0.38589 14.9468 0.439762C15.0782 0.493633 15.1977 0.573197 15.2983 0.673783C15.3987 0.774389 15.4784 0.894026 15.5321 1.02568C15.5859 1.15736 15.6131 1.29845 15.6118 1.44071C15.6105 1.58297 15.5809 1.72357 15.5248 1.85428C15.4688 1.98499 15.3872 2.10324 15.2851 2.20206L9.61883 7.87312L15.2851 13.5441C15.4801 13.7462 15.588 14.0168 15.5854 14.2977C15.5831 14.5787 15.4705 14.8474 15.272 15.046C15.0735 15.2449 14.805 15.3574 14.5244 15.3599C14.2437 15.3623 13.9733 15.2543 13.7714 15.0591L8.10514 9.38812L2.43894 15.0591C2.23704 15.2543 1.96663 15.3623 1.68594 15.3599C1.40526 15.3574 1.13677 15.2449 0.938279 15.046C0.739807 14.8474 0.627232 14.5787 0.624791 14.2977C0.62235 14.0168 0.730236 13.7462 0.92524 13.5441L6.59144 7.87312L0.92524 2.20206C0.724562 2.00115 0.611816 1.72867 0.611816 1.44457C0.611816 1.16047 0.724562 0.887983 0.92524 0.687069Z" fill="currentColor"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow-md border">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold">Transaksi Pembelian Produk</h2>
+        </div>
+        <div class="mb-6">
+            <div class="flex items-center justify-between">
+                <label for="invoice" class="text-sm font-medium text-gray-700">No. Invoice:</label>
+                <div class="flex items-center space-x-2">
+                    <input type="text" id="invoice" name="invoice" value="0" class="w-64 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ml-2">
+                </div>
+                <button class="px-4 py-2 bg-blue-500 text-white rounded-md ml-auto">
+                    Tambah Produk
+                </button>
+            </div>
+        </div>        
+        <div class="mb-4">
+            <label for="supplier" class="block text-sm font-medium text-gray-700 mb-2">Supplier</label>
+            <select id="supplier" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" name="supplier">
+                <option value="">Pilih Supplier</option>
+                <!-- Options will be populated by JavaScript -->
+            </select>
+            <a href="/auth/supplier" class="text-blue-500 text-sm mt-2 inline-block">Tambah Supplier +</a>
+        </div>
+        <table class="min-w-full bg-white">
+            <thead>
+                <tr>
+                    <th class="py-2 px-4 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No.</th>
+                    <th class="py-2 px-4 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                    <th class="py-2 px-4 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Harga Beli</th>
+                    <th class="py-2 px-4 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">QTY</th>
+                    <th class="py-2 px-4 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sub Total</th>
+                    <th class="py-2 px-4 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="storedItemsTableBody">
+                <!-- Rows will be populated by JavaScript -->
+            </tbody>
+        </table>        
+        <div class="mt-6">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <div class="text-sm text-red-500">Total: <span class="font-bold" id="total"></span></div>
+                </div>
+            </div>
+            <div class="mt-4">
+                <button class="px-4 py-2 bg-blue-500 text-white rounded w-full" onclick="savePembelian()">Update Payment</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Structure -->
+    <div id="barangModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg shadow-lg w-11/12 md:w-3/4 lg:w-1/2">
+            <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-lg font-semibold">Barang</h3>
+                <button id="closeModal" class="text-gray-600 hover:text-gray-900">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-4">
+                <table class="min-w-full bg-white">
+                    <thead class="border">
+                        <tr class="bg-gray-100">
+                            <th class="text-center p-4 font-medium">ID</th>
+                            <th class="text-center p-4 font-medium">Name</th>
+                            <th class="text-center p-4 font-medium">Kode Barang</th>
+                            <th class="text-center p-4 font-medium">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="komponentstable">
+                        <!-- Table rows will be populated here -->
+                    </tbody>
+                </table>
+                <div id="pagination" class="mt-4">
+                    <!-- Pagination controls will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function getID(){
+        const pathParts = window.location.pathname.split('/');
+        const id = pathParts[pathParts.length - 1];
+        return id
+    }
+    async function fetchSuppliers() {
+        try {
+            const response = await fetch(`/auth/supplier/cmpinput`);
+            const data = await response.json();
+
+            const supplierSelect = document.getElementById('supplier');
+            supplierSelect.innerHTML = '<option value="" selected>Pilih Supplier</option>';
+
+            if (Array.isArray(data) && data.length > 0) {
+                data.forEach(supplier => {
+                    if (supplier.id && supplier.name) {
+                        const option = document.createElement('option');
+                        option.value = supplier.id; 
+                        option.textContent = supplier.name;
+                        supplierSelect.appendChild(option);
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Error fetching suppliers:', error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchSuppliers();
+
+        const id = getID();
+        setupData(id);
+
+        const barangButton = document.querySelector('button.bg-blue-500'); // Adjust selector if needed
+        const modal = document.getElementById('barangModal');
+        const closeModal = document.getElementById('closeModal');
+
+        barangButton.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+            searchCustomers('', 1); // Fetch data for the first page
+        });
+
+        closeModal.addEventListener('click', () => {
+            modal.classList.add('hidden');
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+            }
+        });
+    });
+
+    async function setupData(id) {
+<<<<<<< HEAD
+        const response = await fetch(`http://localhost:3000/auth/pembelian/detail/${id}`);
+=======
+        const response = await fetch(`/auth/pembelian/detail/${id}`);
+>>>>>>> 7e5e88e (web only)
+        const res = await response.json();
+
+        document.getElementById('invoice').value = res.invoice;
+        document.getElementById('total').textContent = res.total;
+        
+        await fetchSuppliers(); // Fetch all suppliers first
+
+        const supplier = document.getElementById('supplier');
+        supplier.value = res.supplier.supplier_id;
+
+        res.details.forEach(detail => {
+            selectItem(detail.komponen_id, detail.komponen_name, detail.komponen_kd, detail.harga_satuan, detail.jumlah, res.supplier.supplier_id);
+        });
+
+        renderStoredItems();
+    }
+
+    async function searchCustomers(name, page) {
+        const response = await fetch(`/auth/components/cmp?name=${encodeURIComponent(name)}&page=${page}`);
+        const data = await response.json();
+
+        const sup_id = document.getElementById('supplier').value;
+        const real_data = data.komponents.filter(cmp => cmp.supplier_id == sup_id || cmp.supplier_id == null);
+
+        if (real_data.length == 0 && sup_id != '') {
+            document.getElementById('messager').classList.remove('hidden');
+            document.getElementById('messager').classList.add('bg-red-300');
+            document.getElementById('toast-message').innerHTML = 'Supplier harus dipilih terlebih dahulu';
+            return;
+        }
+
+        const tableBody = document.getElementById('komponentstable');
+        tableBody.innerHTML = '';
+
+        real_data.forEach(cmp => {
+            const row = document.createElement('tr');
+            row.className = 'border-b hover:bg-gray-50';
+
+            row.innerHTML = `
+                <td class="p-4 text-center">${cmp.id}</td>
+                <td class="p-4 text-center">${cmp.name}</td>
+                <td class="p-4 text-center">${cmp.kd_barang}</td>
+                <td class="p-4 text-center">
+                    <button class="bg-green-500 hover:bg-green-600 text-white rounded px-3 py-1" onclick="selectItem('${cmp.id}', '${cmp.name}', '${cmp.kd_barang}', '${cmp.supplier_id}')">
+                        Pilih
+                    </button>
+                </td>
+            `;
+
+            tableBody.appendChild(row);
+        });
+
+        // Update pagination
+        updatePagination(data.currentPage, data.totalPage);
+    }
+
+    function updatePagination(currentPage, totalPage) {
+        const paginationContainer = document.getElementById('pagination');
+        paginationContainer.innerHTML = '';
+
+        const span = document.createElement('span');
+        span.className = 'text-xs xs:text-sm text-gray-900';
+        span.textContent = `Showing page ${currentPage} of ${totalPage} page`;
+        paginationContainer.appendChild(span);
+
+        const paginationControls = document.createElement('div');
+        paginationControls.className = 'inline-flex mt-2 xs:mt-0 space-x-2';
+
+        if (currentPage > 1) {
+            const prevButton = document.createElement('a');
+            prevButton.href = '#';
+            prevButton.className = 'text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded';
+            prevButton.textContent = 'Prev';
+            prevButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                searchCustomers(document.getElementById('search').value, currentPage - 1);
+            });
+            paginationControls.appendChild(prevButton);
+        }
+
+        if (currentPage < totalPage) {
+            const nextButton = document.createElement('a');
+            nextButton.href = '#';
+            nextButton.className = 'text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded';
+            nextButton.textContent = 'Next';
+            nextButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                searchCustomers(document.getElementById('search').value, currentPage + 1);
+            });
+            paginationControls.appendChild(nextButton);
+        }
+
+        paginationContainer.appendChild(paginationControls);
+    }
+
+    function selectItem(id, name, kode_barang, harga, qty, supplier_id) {
+        const item = {
+            id: id,
+            name: name,
+            kode_barang: kode_barang,
+            supplier_id: supplier_id,
+            harga: harga, // Default value or you might want to update this value later
+            quantity: qty // Default value
+        };
+        let storedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
+        const existingItem = storedItems.find(storedItem => storedItem.id === id);
+
+        if (!existingItem) {
+            storedItems.push(item);
+            localStorage.setItem('selectedItems', JSON.stringify(storedItems));
+            renderStoredItems();
+        }
+    }
+
+    function renderStoredItems() {
+        const storedItemsTableBody = document.getElementById('storedItemsTableBody');
+        const storedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
+
+        storedItemsTableBody.innerHTML = '';
+
+        storedItems.forEach((item, index) => {
+            const row = document.createElement('tr');
+            row.className = 'border-b hover:bg-gray-50';
+
+            row.innerHTML = `
+                <td class="py-2 px-4 border-t border-gray-200">${index + 1}</td>
+                <td class="py-2 px-4 border-t border-gray-200">${item.name}</td>
+                <td class="py-2 px-4 border-t border-gray-200">
+<<<<<<< HEAD
+                    <input type="number" value="${item.harga}" data-id="${item.id}" data-type="harga" class="item-input w-full" />
+=======
+                    <input type="text" value="${formatDaNumber(item.harga)}" data-id="${item.id}" data-type="harga" class="item-input w-full" oninput="this.value = formatDaNumber(this.value)" />
+>>>>>>> 7e5e88e (web only)
+                </td>
+                <td class="py-2 px-4 border-t border-gray-200">
+                    <input type="number" value="${item.quantity}" data-id="${item.id}" data-type="quantity" class="item-input w-full" />
+                </td>
+                <td class="py-2 px-4 border-t border-gray-200">
+<<<<<<< HEAD
+                    <span class="subtotal" data-id="${item.id}">${(item.harga * item.quantity).toFixed(2)}</span>
+=======
+                    <span class="subtotal" data-id="${item.id}">${formatDaNumber(item.harga * item.quantity)}</span>
+>>>>>>> 7e5e88e (web only)
+                </td>
+                <td class="py-2 px-4 border-t border-gray-200">
+                    <button class="px-2 py-1 bg-red-500 text-white rounded" onclick="deleteItem('${item.id}')">Delete</button>
+                </td>
+            `;
+
+            storedItemsTableBody.appendChild(row);
+        });
+
+        document.querySelectorAll('.item-input').forEach(input => {
+            input.addEventListener('input', updateItem);
+        });
+
+        updateTotal();
+    }
+
+    function updateItem(event) {
+        const input = event.target;
+        const id = input.dataset.id;
+        const type = input.dataset.type;
+<<<<<<< HEAD
+        const value = parseFloat(input.value) || 0;
+=======
+        const value = parseInt(turnBackDaNumber(input.value)) || 0;
+>>>>>>> 7e5e88e (web only)
+
+        let storedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
+        const itemIndex = storedItems.findIndex(item => item.id == id);
+
+        if (itemIndex !== -1) {
+            storedItems[itemIndex][type] = value;
+
+            // Immediately update localStorage
+            localStorage.setItem('selectedItems', JSON.stringify(storedItems));
+            
+            const item = storedItems[itemIndex];
+            const subtotal = item.harga * item.quantity;
+            
+            // Update subtotal in the DOM
+            const subtotalElement = document.querySelector(`.subtotal[data-id="${id}"]`);
+            if (subtotalElement) {
+<<<<<<< HEAD
+                subtotalElement.textContent = subtotal.toFixed(2);
+=======
+                subtotalElement.textContent = formatDaNumber(subtotal);
+>>>>>>> 7e5e88e (web only)
+            }
+
+            updateTotal();
+        } else {
+            console.error(`Item with id ${id} not found in localStorage`);
+        }
+    }
+
+    function updateTotal() {
+        const storedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
+        const total = storedItems.reduce((sum, item) => sum + (item.harga * item.quantity), 0);
+<<<<<<< HEAD
+        document.getElementById('total').textContent = total.toFixed(2);
+        console.log(`Total updated: ${total.toFixed(2)}`);
+=======
+        document.getElementById('total').textContent = formatDaNumber(total);
+//        console.log(`Total updated: ${formatDaNumber(total)}`);
+>>>>>>> 7e5e88e (web only)
+    }
+
+    function deleteItem(id) {
+        const ids = parseInt(id);
+        const storedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
+        const updatedItems = storedItems.filter(item => item.id !== ids);
+
+        localStorage.setItem('selectedItems', JSON.stringify(updatedItems));
+        renderStoredItems();
+    }
+
+    // Call this function on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        renderStoredItems();
+        updateTotal();
+    });
+
+    async function savePembelian() {
+        const selectedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
+<<<<<<< HEAD
+        const totalAmount = parseFloat(document.getElementById('total').textContent);
+=======
+        const totalAmount = parseInt(turnBackDaNumber(document.getElementById('total').textContent));
+>>>>>>> 7e5e88e (web only)
+        const supplier_id = selectedItems[0]?.supplier_id; // Safe access
+        const invoice = document.getElementById('invoice').value;
+        const id = getID();
+
+        // Validasi input
+        if (selectedItems.length === 0 || !supplier_id || !invoice) {
+            alert('Mohon lengkapi semua data pembelian');
+            return;
+        }
+
+        // Menyiapkan data untuk dikirim ke server
+        const requestData = {
+            supplier_id: supplier_id,
+            total: totalAmount,
+            invoice: invoice,
+            komponen_id: selectedItems.map(item => item.id),
+            qty: selectedItems.map(item => item.quantity),
+            harga_satuan: selectedItems.map(item => item.harga)
+        };
+
+        try {
+            // Mengirim data ke server
+            const response = await fetch(`/auth/pembelian/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const result = await response.json();
+            if (response.ok) {
+                window.location.href = '/auth/pembelian';
+                showMEssage(result);
+            } else {
+                showMEssage(result);
+            }
+
+            // Bersihkan local storage dan reset form
+            localStorage.removeItem('selectedItems');
+            document.getElementById('invoice').value = '';
+            renderStoredItems(); // Fungsi untuk me-render ulang tabel item
+            updateTotal(); // Fungsi untuk memperbarui total
+
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat menyimpan pembelian');
+        }
+    }
+    function showMEssage(res) {
+        const messager = document.getElementById('messager');
+        if (res.ok){
+            messager.classList.add('bg-green-500');
+            messager.classList.remove('invisible');
+            messager.innerHTML = res.message;
+        } else {
+            messager.classList.add('bg-red-500');
+            messager.classList.remove('invisible');
+            messager.innerHTML = res.message;
+        }
+    }
+
+    window.addEventListener('beforeunload', () => {
+        localStorage.removeItem('selectedItems');
+    });
+<<<<<<< HEAD
+=======
+
+    function formatDaNumber(price){
+      if (typeof price === 'number') {
+        return Intl.NumberFormat('id-ID').format(price);
+      }
+
+      let val = price.replace(/\D/g, '')
+      return Intl.NumberFormat('id-ID').format(val);
+    }
+
+    function turnBackDaNumber(price){
+      const rawValue = price.replace(/\./g, '');
+      const finalPrice = parseInt(rawValue, 10);
+
+      return finalPrice;
+    }
+>>>>>>> 7e5e88e (web only)
+</script>
+
+<%- include('../template/footer') %>

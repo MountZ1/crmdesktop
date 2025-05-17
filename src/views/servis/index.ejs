@@ -1,0 +1,576 @@
+<%- include('../template/template') %>
+<div class="container mx-auto">
+    <h1 class="text-2xl font-bold text-center">Servis Aktif</h1>
+    <hr class="m-6">
+    <div class="flex justify-between items-center pl-6 pr-6">
+        <a href="/auth/servis/create" class="bg-blue-500 text-white p-2 rounded font-bold">Tambah</a>
+        <div>
+            <div class="my-2 flex sm:flex-row flex-col justify-end float-right">
+                <!-- Search Input -->
+                <div class="relative flex-grow mb-1 sm:mb-0 sm:mr-2">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+                        <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current text-gray-500">
+                            <path d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1114.32 4.906l5.387 5.387a1 1 0 01-1.414 1.414l-5.387-5.387A8 8 0 012 10z"></path>
+                        </svg>
+                    </span>
+                    <input placeholder="Cari Invoice"
+                        class="appearance-none rounded-l sm:rounded border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none" id="search"/>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-xs text-sm text-white rounded-md shadow-lg invisible" role="alert" id="messager">
+          <div class="flex p-4">
+            <span id="toast-message"></span>
+            <div class="ml-auto">
+              <button type="button" class="inline-flex flex-shrink-0 justify-center items-center h-4 w-4 rounded-md text-white/[.5] hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-800 focus:ring-red-500 transition-all text-sm ml-2" onclick="closeToast()">
+                <span class="sr-only">Close</span>
+                <svg class="w-3.5 h-3.5" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0.92524 0.687069C1.126 0.486219 1.39823 0.373377 1.68209 0.373377C1.96597 0.373377 2.2382 0.486219 2.43894 0.687069L8.10514 6.35813L13.7714 0.687069C13.8701 0.584748 13.9882 0.503105 14.1188 0.446962C14.2494 0.39082 14.3899 0.361248 14.5321 0.360026C14.6742 0.358783 14.8151 0.38589 14.9468 0.439762C15.0782 0.493633 15.1977 0.573197 15.2983 0.673783C15.3987 0.774389 15.4784 0.894026 15.5321 1.02568C15.5859 1.15736 15.6131 1.29845 15.6118 1.44071C15.6105 1.58297 15.5809 1.72357 15.5248 1.85428C15.4688 1.98499 15.3872 2.10324 15.2851 2.20206L9.61883 7.87312L15.2851 13.5441C15.4801 13.7462 15.588 14.0168 15.5854 14.2977C15.5831 14.5787 15.4705 14.8474 15.272 15.046C15.0735 15.2449 14.805 15.3574 14.5244 15.3599C14.2437 15.3623 13.9733 15.2543 13.7714 15.0591L8.10514 9.38812L2.43894 15.0591C2.23704 15.2543 1.96663 15.3623 1.68594 15.3599C1.40526 15.3574 1.13677 15.2449 0.938279 15.046C0.739807 14.8474 0.627232 14.5787 0.624791 14.2977C0.62235 14.0168 0.730236 13.7462 0.92524 13.5441L6.59144 7.87312L0.92524 2.20206C0.724562 2.00115 0.611816 1.72867 0.611816 1.44457C0.611816 1.16047 0.724562 0.887983 0.92524 0.687069Z" fill="currentColor"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="bg-white p-6">
+        <div class="overflow-x-auto border-x border-t">
+            <table class="table-auto w-full">
+                <thead class="border-b">
+                    <tr class="bg-gray-100">
+                        <th class="text-center p-4 font-medium">ID</th>
+                        <th class="text-center p-4 font-medium">Kode</th>
+                        <th class="text-center p-4 font-medium">Customer</th>
+                        <th class="text-center p-4 font-medium">Tanggal Masuk</th>
+                        <th class="text-center p-4 font-medium">Status Servis</th>
+                        <th class="text-center p-4 font-medium">Status Bayar</th>
+                        <th class="text-center p-4 font-medium">Terbayar</th>
+                        <th class="text-center p-4 font-medium">Total</th>
+                        <th class="text-center p-4 font-medium">Terutang</th>
+                        <th class="text-center p-4 font-medium">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="customerstable">
+                    
+                </tbody>
+            </table>
+        </div>
+        <div id="pagination" class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
+           
+        </div>
+    </div>
+
+    <div class="main-modal fixed w-full inset-0 z-50 overflow-hidden flex justify-center items-center hidden" style="background: rgba(0,0,0,.7);">
+<<<<<<< HEAD
+        <div class="shadow-lg modal-container bg-white w-4/12 md:max-w-11/12 mx-auto rounded shadow-lg z-50 overflow-y-auto max-h-[80vh]">
+=======
+        <div class="shadow-lg modal-container bg-white w-4/12 md:max-w-11/12 mx-auto rounded z-50 overflow-y-auto max-h-[80vh]">
+>>>>>>> 7e5e88e (web only)
+            <div class="modal-content py-4 text-left px-6">
+                <div class="print-content">
+                    <div class="flex flex-col justify-center items-center gap-2">
+                        <h4 class="font-semibold">RedHot Komputer</h4>
+                        <p class="text-xs">Jl. Karang Rejo Raya No. 20, Banyumanik</p>
+                    </div>
+                    <!--Body-->
+                    <div class="my-5 mx-5" id="modal-body">
+                        <!-- Content will be dynamically inserted here -->
+                    </div>
+                    <div class="border-b border border-dashed"></div>
+                    <div class="py-4 justify-center items-center flex flex-col gap-2">
+                        <p class="flex gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"><path fill="#000" d="M11.05 14.95L9.2 16.8c-.39.39-1.01.39-1.41.01-.11-.11-.22-.21-.33-.32a28.414 28.414 0 01-2.79-3.27c-.82-1.14-1.48-2.28-1.96-3.41C2.24 8.67 2 7.58 2 6.54c0-.68.12-1.33.36-1.93.24-.61.62-1.17 1.15-1.67C4.15 2.31 4.85 2 5.59 2c.28 0 .56.06.81.18.26.12.49.3.67.56l2.32 3.27c.18.25.31.48.4.7.09.21.14.42.14.61 0 .24-.07.48-.21.71-.13.23-.32.47-.56.71l-.76.79c-.11.11-.16.24-.16.4 0 .08.01.15.03.23.03.08.06.14.08.2.18.33.49.76.93 1.28.45.52.93 1.05 1.45 1.58.1.1.21.2.31.3.4.39.41 1.03.01 1.43zM21.97 18.33a2.54 2.54 0 01-.25 1.09c-.17.36-.39.7-.68 1.02-.49.54-1.03.93-1.64 1.18-.01 0-.02.01-.03.01-.59.24-1.23.37-1.92.37-1.02 0-2.11-.24-3.26-.73s-2.3-1.15-3.44-1.98c-.39-.29-.78-.58-1.15-.89l3.27-3.27c.28.21.53.37.74.48.05.02.11.05.18.08.08.03.16.04.25.04.17 0 .3-.06.41-.17l.76-.75c.25-.25.49-.44.72-.56.23-.14.46-.21.71-.21.19 0 .39.04.61.13.22.09.45.22.7.39l3.31 2.35c.26.18.44.39.55.64.1.25.16.5.16.78z"></path></svg> +62 000000000000</p>
+                        <p class="flex gap-2" id="tangal"></p>
+                    </div>
+                </div>
+                <div class="flex justify-center pt-2 space-x-4 print-hidden">
+<<<<<<< HEAD
+                    <button type="button" class="px-4 bg-blue-500 py-2 rounded text-white hover:bg-blue-600 font-semibold" id="status"></button>
+                    <button type="button" class="px-4 bg-green-500 py-2 rounded text-white hover:bg-green-600 font-semibold" onclick="updateLunas(this)" id="lunas">Lunas</button>
+                    <button class="px-4 bg-red-500 py-2 rounded text-white hover:bg-red-600 font-semibold" onclick="printModal()">Print</button>
+                    <button type="button" class="px-4 bg-gray-200 py-2 rounded text-black hover:bg-gray-300 font-semibold" onclick="modalClose()">Close</button>
+=======
+                    <button type="button" class="px-2 bg-red-500 py-2 rounded text-white hover:bg-red-600 text-sm font-semibold" id="cancel" onclick="updateProses(this.getAttribute('data-id'), 'cancel')">Batalkan Servis</button>
+                    <button type="button" class="px-2 bg-blue-500 py-2 rounded text-white hover:bg-blue-600 font-semibold text-sm" id="status"></button>
+                    <button type="button" class="px-2 bg-green-500 py-2 rounded text-white hover:bg-green-600 font-semibold text-sm" onclick="updateLunas(this)" id="lunas">Lunas</button>
+                    <button class="px-2 bg-cyan-400 py-2 rounded text-white hover:bg-cyan-800 font-semibold text-sm" onclick="printModal()">Print</button>
+                    <button type="button" class="px-2 bg-gray-200 py-2 rounded text-black hover:bg-gray-300 font-semibold text-sm" onclick="modalClose()">Close</button>
+>>>>>>> 7e5e88e (web only)
+                </div>
+            </div>
+        </div>
+    </div>   
+    <iframe id="print-iframe" style="display: none;"></iframe>
+</div>
+
+<script>
+    const modal = document.querySelector('.main-modal');
+    function openModal() {
+        document.querySelector('.main-modal').classList.remove('hidden');
+    }
+
+    function modalClose() {
+        document.querySelector('.main-modal').classList.add('hidden');
+    }
+
+    document.getElementById('search').addEventListener('input', function() {
+        searchCustomers(this.value, 1);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        searchCustomers(document.getElementById('search').value, 1);
+    })
+    
+    async function searchCustomers(name, page) {
+        const response = await fetch(`/auth/servis/srv?name=${encodeURIComponent(name)}&page=${page}`);
+        const data = await response.json();
+<<<<<<< HEAD
+
+        // Clear the existing table rows
+        const tableBody = document.getElementById('customerstable');
+        tableBody.innerHTML = '';
+
+        // Update the table with new results
+        data.services.forEach((pnj, index) => {
+            const row = document.createElement('tr');
+            row.className = 'border-b hover:bg-gray-50';
+
+            row.innerHTML = `
+                <td class="p-4 text-center">${index + 1}</td>
+                <td class="p-4 text-center">${pnj.bon}</td>
+                <td class="p-4 text-center">${pnj.customer}</td>
+                <td class="p-4 text-center">${formatDate(pnj.tanggal_servis)}</td>
+                <td class="p-4 text-center">${pnj.status}</td>
+                <td class="p-4 text-center">${pnj.status_bayar}</td>
+                <td class="p-4 text-center">${pnj.terbayar}</td>
+                <td class="p-4 text-center">${pnj.total}</td>
+                <td class="p-4 text-center">${pnj.terutang || 0}</td>
+                <td class="p-4 space-x-2 text-center">
+                    <button onclick="editListener('${pnj.id}')" class="bg-yellow-400 hover:bg-yellow-500 rounded p-1 w-6 h-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"/></svg> 
+                    </button>
+                    <button class="bg-cyan-400 hover:bg-cyan-500 rounded p-1 w-6 h-6" onclick="showListener('${pnj.id}')">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M3 17.46v3.04c0 .28.22.5.5.5h3.04c.13 0 .26-.05.35-.15L17.81 9.94l-3.75-3.75L3.15 17.1c-.1.1-.15.22-.15.36M20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83l3.75 3.75z"/>
+                        </svg>  
+                    </button>
+                    <button class="bg-red-500 hover:bg-red-600 rounded p-1 w-6 h-6" onclick="deleteListener('${pnj.id}')">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2zM18 4h-2.5l-.71-.71c-.18-.18-.44-.29-.7-.29H9.91c-.26 0-.52.11-.7.29L8.5 4H6c-.55 0-1 .45-1 1s.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1"/>
+                        </svg> 
+                    </button>
+                    <button onclick="window.open('https://api.whatsapp.com/send?phone=${pnj.no_telp}')" class="bg-green-400 hover:bg-green-500 rounded p-1 w-6 h-6">
+                        <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <path fill="currentColor" fill-rule="evenodd" d="M12 4a8 8 0 0 0-6.895 12.06l.569.718-.697 2.359 2.32-.648.379.243A8 8 0 1 0 12 4ZM2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10a9.96 9.96 0 0 1-5.016-1.347l-4.948 1.382 1.426-4.829-.006-.007-.033-.055A9.958 9.958 0 0 1 2 12Z" clip-rule="evenodd"/>
+                            <path fill="currentColor" d="M16.735 13.492c-.038-.018-1.497-.736-1.756-.83a1.008 1.008 0 0 0-.34-.075c-.196 0-.362.098-.49.291-.146.217-.587.732-.723.886-.018.02-.042.045-.057.045-.013 0-.239-.093-.307-.123-1.564-.68-2.751-2.313-2.914-2.589-.023-.04-.024-.057-.024-.057.005-.021.058-.074.085-.101.08-.079.166-.182.249-.283l.117-.14c.121-.14.175-.25.237-.375l.033-.066a.68.68 0 0 0-.02-.64c-.034-.069-.65-1.555-.715-1.711-.158-.377-.366-.552-.655-.552-.027 0 0 0-.112.005-.137.005-.883.104-1.213.311-.35.22-.94.924-.94 2.16 0 1.112.705 2.162 1.008 2.561l.041.06c1.161 1.695 2.608 2.951 4.074 3.537 1.412.564 2.081.63 2.461.63.16 0 .288-.013.4-.024l.072-.007c.488-.043 1.56-.599 1.804-1.276.192-.534.243-1.117.115-1.329-.088-.144-.239-.216-.43-.308Z"/>
+                        </svg>  
+                    </button>
+                </td>
+            `;
+
+            tableBody.appendChild(row);
+        });
+
+        // Update pagination
+        updatePagination(data.currentPage, data.totalPage);
+=======
+        updateTable(data.services)
+        updatePagination(data.currentPage, data.totalPage);
+    }
+
+    function updateTable(penjualans) {
+        const tableBody = document.getElementById('customerstable');
+        tableBody.innerHTML = '';
+
+        penjualans.forEach((pnj, index) => {
+            const row = createTableRow(pnj, index);
+            tableBody.appendChild(row);
+        });
+    }
+    function createTableRow(pnj, index) {
+        const row = document.createElement('tr');
+        row.className = 'border-b hover:bg-gray-50';
+        row.innerHTML = `
+                            <td class="p-4 text-center">${index + 1}</td>
+                            <td class="p-4 text-center">${pnj.bon}</td>
+                            <td class="p-4 text-center">${pnj.customer}</td>
+                            <td class="p-4 text-center">${formatDate(pnj.tanggal_servis)}</td>
+                            <td class="p-4 text-center">${pnj.status}</td>
+                            <td class="p-4 text-center">${pnj.status_bayar}</td>
+                            <td class="p-4 text-center">${formatDaNumber(pnj.terbayar)}</td>
+                            <td class="p-4 text-center">${formatDaNumber(pnj.total)}</td>
+                            <td class="p-4 text-center">${formatDaNumber(pnj.terutang) || 0}</td>
+                            <td class="p-4 space-x-2 text-center">
+                                <button onclick="editListener('${pnj.id}')" class="bg-yellow-400 hover:bg-yellow-500 rounded p-1 w-6 h-6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"/></svg> 
+                                </button>
+                                <button class="bg-cyan-400 hover:bg-cyan-500 rounded p-1 w-6 h-6" onclick="showListener('${pnj.id}')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M3 17.46v3.04c0 .28.22.5.5.5h3.04c.13 0 .26-.05.35-.15L17.81 9.94l-3.75-3.75L3.15 17.1c-.1.1-.15.22-.15.36M20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83l3.75 3.75z"/>
+                                    </svg>  
+                                </button>
+                                ${createActionButtons(pnj)}
+                                <button onclick="window.open('https://api.whatsapp.com/send?phone=${pnj.no_telp}')" class="bg-green-400 hover:bg-green-500 rounded p-1 w-6 h-6">
+                                    <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <path fill="currentColor" fill-rule="evenodd" d="M12 4a8 8 0 0 0-6.895 12.06l.569.718-.697 2.359 2.32-.648.379.243A8 8 0 1 0 12 4ZM2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10a9.96 9.96 0 0 1-5.016-1.347l-4.948 1.382 1.426-4.829-.006-.007-.033-.055A9.958 9.958 0 0 1 2 12Z" clip-rule="evenodd"/>
+                                        <path fill="currentColor" d="M16.735 13.492c-.038-.018-1.497-.736-1.756-.83a1.008 1.008 0 0 0-.34-.075c-.196 0-.362.098-.49.291-.146.217-.587.732-.723.886-.018.02-.042.045-.057.045-.013 0-.239-.093-.307-.123-1.564-.68-2.751-2.313-2.914-2.589-.023-.04-.024-.057-.024-.057.005-.021.058-.074.085-.101.08-.079.166-.182.249-.283l.117-.14c.121-.14.175-.25.237-.375l.033-.066a.68.68 0 0 0-.02-.64c-.034-.069-.65-1.555-.715-1.711-.158-.377-.366-.552-.655-.552-.027 0 0 0-.112.005-.137.005-.883.104-1.213.311-.35.22-.94.924-.94 2.16 0 1.112.705 2.162 1.008 2.561l.041.06c1.161 1.695 2.608 2.951 4.074 3.537 1.412.564 2.081.63 2.461.63.16 0 .288-.013.4-.024l.072-.007c.488-.043 1.56-.599 1.804-1.276.192-.534.243-1.117.115-1.329-.088-.144-.239-.216-.43-.308Z"/>
+                                    </svg>  
+                                </button>
+                            </td>
+        `;
+
+        return row;
+    }
+    function createActionButtons(pnj) {
+        let buttons = ``;
+
+        if (isAdmin()) {
+            buttons += `
+                        <button class="bg-red-500 hover:bg-red-600 rounded p-1 w-6 h-6" onclick="deleteListener('${pnj.id}')">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2zM18 4h-2.5l-.71-.71c-.18-.18-.44-.29-.7-.29H9.91c-.26 0-.52.11-.7.29L8.5 4H6c-.55 0-1 .45-1 1s.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1"/>
+                            </svg> 
+                        </button>`
+        }
+
+        return buttons;
+    }
+
+    function isAdmin() {
+        return `<%= user %>` && `<%= user.role %>` === 'Admin';
+>>>>>>> 7e5e88e (web only)
+    }
+
+    function updatePagination(currentPage, totalPage) {
+        const paginationContainer = document.getElementById('pagination');
+        paginationContainer.innerHTML = '';
+
+        const span = document.createElement('span');
+        span.className = 'text-xs xs:text-sm text-gray-900';
+        span.textContent = `Showing page ${currentPage} of ${totalPage} page`;
+        paginationContainer.appendChild(span);
+
+        const paginationControls = document.createElement('div');
+        paginationControls.className = 'inline-flex mt-2 xs:mt-0 space-x-2';
+
+        if (currentPage > 1) {
+            const prevButton = document.createElement('a');
+            prevButton.href = '#';
+            prevButton.className = 'text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded';
+            prevButton.textContent = 'Prev';
+            prevButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                searchCustomers(document.getElementById('search').value, currentPage - 1);
+            });
+            paginationControls.appendChild(prevButton);
+        }
+
+        if (currentPage < totalPage) {
+            const nextButton = document.createElement('a');
+            nextButton.href = '#';
+            nextButton.className = 'text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded';
+            nextButton.textContent = 'Next';
+            nextButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                searchCustomers(document.getElementById('search').value, currentPage + 1);
+            });
+            paginationControls.appendChild(nextButton);
+        }
+
+        paginationContainer.appendChild(paginationControls);
+    }
+    function showListener(id){
+        window.location.href = `/auth/servis/show/${id}`
+    }
+
+    async function editListener(pembelianId) {
+        const response = await fetch(`/auth/servis/${pembelianId}`);
+        const data = await response.json();
+        openModal();
+
+        const modalBody = document.getElementById('modal-body');
+        const modalTitle = document.getElementById('modal-title');
+
+        if (!response.ok) {
+            alert('Terjadi kesalahan saat mengambil detail pembelian');
+            return;
+        }
+
+<<<<<<< HEAD
+        document.getElementById('lunas').setAttribute('data-id', data.id)
+=======
+        const lunas = document.getElementById('lunas');
+        const cancel = document.getElementById('cancel');
+        if (data.status_bayar == "Lunas"){
+            lunas.remove();
+        }
+        lunas.setAttribute('data-id', data.id);
+        cancel.setAttribute('data-id', data.id);
+>>>>>>> 7e5e88e (web only)
+        if (data.status == "pending"){
+            document.getElementById('status').textContent = "Proses"
+            document.getElementById('status').addEventListener('click', () => updateProses(data.id, 'proses'))
+        } else if (data.status == "proses"){
+            document.getElementById('status').textContent = "Selesai"
+            document.getElementById('status').addEventListener('click', () => updateProses(data.id, 'selesai'))
+        }
+        // Populate modal body with detailed data
+       
+        modalBody.innerHTML = `
+            <div class=" border-b border border-dashed"></div>
+            <div class="flex flex-col gap-3 py-2 text-xs">
+                <p class="flex justify-between">
+                <span class="text-gray-400">Invoice :</span>
+                <span>${data.invoice}</span>
+                </p>
+                <p class="flex justify-between">
+                <span class="text-gray-400">Tanggal :</span>
+                <span>${formatDate(data.created_at)}</span>
+                </p>
+                <p class="flex justify-between">
+                <span class="text-gray-400">Kasir :</span>
+                <span>${data.kasir}</span>
+                </p>
+                <p class="flex justify-between">
+                <span class="text-gray-400">Customer :</span>
+                <span>${data.customer}</span>
+                </p>
+            </div>
+            <div class=" border-b border mt-4"></div>
+            <div class="flex flex-col gap-3 pb-6 pt-2 text-xs">
+                <p class="flex justify-between">Service Name</p>
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Perbaikan</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Biaya perbaikan</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        ${data.servis.map(detail => `
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">${detail.masalah}</td>
+<<<<<<< HEAD
+                                <td class="px-6 py-4 whitespace-nowrap">${detail.biaya}</td>
+=======
+                                <td class="px-6 py-4 whitespace-nowrap">${formatDaNumber(detail.biaya)}</td>
+>>>>>>> 7e5e88e (web only)
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+                <div class=" border-b border mt-4"></div>
+                <p class="flex justify-between">Komponen</p>
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Price</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        ${data.items.map(detail => `
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">${detail.komponen}</td>
+<<<<<<< HEAD
+                                <td class="px-6 py-4 whitespace-nowrap">${detail.harga}</td>
+=======
+                                <td class="px-6 py-4 whitespace-nowrap">${formatDaNumber(detail.harga)}</td>
+>>>>>>> 7e5e88e (web only)
+                                <td class="px-6 py-4 whitespace-nowrap">${detail.jumlah}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+                <div class=" border-b border mt-4"></div>
+                <p class="flex justify-between">
+                <span class="text-gray-400">Total :</span>
+<<<<<<< HEAD
+                <span>${data.biaya_total}</span>
+=======
+                <span>${formatDaNumber(data.biaya_total)}</span>
+>>>>>>> 7e5e88e (web only)
+                </p>
+                <p class="flex justify-between">
+                <span class="text-gray-400">Status :</span>
+                <span>${data.status_bayar}</span>
+                </p>
+            </div>
+        `;
+        
+    }
+
+    function updateProses(id, status) {
+<<<<<<< HEAD
+=======
+        console.log(id);
+>>>>>>> 7e5e88e (web only)
+        try {
+            fetch('/auth/servis/' + id, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: status })
+            }).then(async (res) => {
+                const response = await res.json();
+                if (res.ok) {
+                    window.location.href = '/auth/servis';
+                } else {
+                    messager.classList.add('bg-red-500')
+                    message.innerHTML = response.message;
+                }
+            });
+        } catch (error) {
+            console.error('Error deleting user:', error);
+        }
+    }
+
+    function updateLunas(e){
+        const id = e.getAttribute('data-id');
+        try {
+            fetch('/auth/servis/lunas/' + id, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: 'PUT',
+            }).then(async (res) => {
+                const response = await res.json();
+                if (res.ok) {
+                    window.location.href = '/auth/servis';
+                } else {
+                    messager.classList.add('bg-red-500')
+                    message.innerHTML = response.message;
+                }
+            })
+        } catch (error) {
+            console.error('Error deleting user:', error);
+        }
+    }
+
+    async function deleteListener(id){
+<<<<<<< HEAD
+        try {
+            await fetch('/auth/penjualan/' + id, {
+                method: 'DELETE'
+            }).then(async (res) => {
+                const response = await res.json();
+                if (res.ok) {
+=======
+            await fetch('/auth/servis/' + id, {
+                method: 'DELETE'
+            }).then(async (res) => {
+                const response = await res.json();
+                if (res.status == 200) {
+>>>>>>> 7e5e88e (web only)
+                    location.reload();
+                } else {
+                    messager.classList.add('bg-red-500')
+                    message.innerHTML = response.message;
+                }
+            });
+<<<<<<< HEAD
+        } catch (error) {
+            console.error('Error deleting user:', error);
+        }
+=======
+>>>>>>> 7e5e88e (web only)
+    }
+    function formatDate(datetimeString) {
+        if (!datetimeString) return 'Invalid Date'; // Handle null or undefined dates
+        
+        const date = new Date(datetimeString);
+
+        // Check if date is valid
+        if (isNaN(date.getTime())) {
+            console.error('Invalid date:', datetimeString);
+            return 'Invalid Date';
+        }
+
+        return date.toISOString().split('T')[0]; // Only date part (YYYY-MM-DD)
+    }
+    function printModal() {
+        const modalContent = document.querySelector('.modal-container').innerHTML;
+        
+        // Create a temporary div to manipulate the content
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = modalContent;
+        
+        // Remove elements that shouldn't be printed
+        tempDiv.querySelectorAll('.print-hidden').forEach(el => el.remove());
+        
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+        
+        iframe.contentDocument.write(createIframeContent(tempDiv.innerHTML));
+        iframe.contentDocument.close();
+        
+        // Wait for Tailwind to load
+        setTimeout(() => {
+            iframe.contentWindow.print();
+            
+            // Remove the iframe after printing
+            setTimeout(() => {
+                document.body.removeChild(iframe);
+            }, 100);
+        }, 1000);
+    }
+    function createIframeContent(modalContent) {
+        return `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                @import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
+                @page {
+                    margin: 0;
+                    size: A4;
+                }
+
+                body {
+                    -webkit-print-color-adjust: exact !important;
+                    print-color-adjust: exact !important;
+                }
+
+                @media print {
+                    .print-hidden {
+                        display: none !important;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="print-content">
+                ${modalContent}
+            </div>
+        </body>
+        </html>
+        `;
+<<<<<<< HEAD
+    }
+</script>
+
+<%- include('../template/footer') %>
+=======
+    }  
+
+    function formatDaNumber(price){
+      if (typeof price === 'number') {
+        return Intl.NumberFormat('id-ID').format(price);
+      }
+
+      let val = price.replace(/\D/g, '')
+      return Intl.NumberFormat('id-ID').format(val);
+    }
+
+    function turnBackDaNumber(price){
+      const rawValue = price.replace(/\./g, '');
+      const finalPrice = parseInt(rawValue, 10);
+
+      return finalPrice;
+    }
+</script>
+
+<%- include('../template/footer') %>
+>>>>>>> 7e5e88e (web only)

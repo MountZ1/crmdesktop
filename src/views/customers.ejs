@@ -1,0 +1,298 @@
+<%- include('template/template') %>
+<div class="container mx-auto">
+    <h1 class="text-2xl font-bold text-center">Halaman Customer</h1>
+    <hr class="m-6">
+    <div class="flex justify-between items-center pl-6 pr-6">
+        <button onclick="openModal()" class="bg-blue-500 text-white p-2 rounded font-bold">Tambah Customer</button>
+        <div>
+            <div class="my-2 flex sm:flex-row flex-col justify-end float-right">
+                <!-- Search Input -->
+                <div class="relative flex-grow mb-1 sm:mb-0 sm:mr-2">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+                        <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current text-gray-500">
+                            <path d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1114.32 4.906l5.387 5.387a1 1 0 01-1.414 1.414l-5.387-5.387A8 8 0 012 10z"></path>
+                        </svg>
+                    </span>
+                    <input placeholder="Cari nama customers"
+                        class="appearance-none rounded-l sm:rounded border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none" id="search"/>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-xs text-sm text-white rounded-md shadow-lg invisible" role="alert" id="messager">
+          <div class="flex p-4">
+            <span id="toast-message"></span>
+            <div class="ml-auto">
+              <button type="button" class="inline-flex flex-shrink-0 justify-center items-center h-4 w-4 rounded-md text-white/[.5] hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-800 focus:ring-red-500 transition-all text-sm ml-2" onclick="closeToast()">
+                <span class="sr-only">Close</span>
+                <svg class="w-3.5 h-3.5" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0.92524 0.687069C1.126 0.486219 1.39823 0.373377 1.68209 0.373377C1.96597 0.373377 2.2382 0.486219 2.43894 0.687069L8.10514 6.35813L13.7714 0.687069C13.8701 0.584748 13.9882 0.503105 14.1188 0.446962C14.2494 0.39082 14.3899 0.361248 14.5321 0.360026C14.6742 0.358783 14.8151 0.38589 14.9468 0.439762C15.0782 0.493633 15.1977 0.573197 15.2983 0.673783C15.3987 0.774389 15.4784 0.894026 15.5321 1.02568C15.5859 1.15736 15.6131 1.29845 15.6118 1.44071C15.6105 1.58297 15.5809 1.72357 15.5248 1.85428C15.4688 1.98499 15.3872 2.10324 15.2851 2.20206L9.61883 7.87312L15.2851 13.5441C15.4801 13.7462 15.588 14.0168 15.5854 14.2977C15.5831 14.5787 15.4705 14.8474 15.272 15.046C15.0735 15.2449 14.805 15.3574 14.5244 15.3599C14.2437 15.3623 13.9733 15.2543 13.7714 15.0591L8.10514 9.38812L2.43894 15.0591C2.23704 15.2543 1.96663 15.3623 1.68594 15.3599C1.40526 15.3574 1.13677 15.2449 0.938279 15.046C0.739807 14.8474 0.627232 14.5787 0.624791 14.2977C0.62235 14.0168 0.730236 13.7462 0.92524 13.5441L6.59144 7.87312L0.92524 2.20206C0.724562 2.00115 0.611816 1.72867 0.611816 1.44457C0.611816 1.16047 0.724562 0.887983 0.92524 0.687069Z" fill="currentColor"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="bg-white p-6">
+        <div class="overflow-x-auto border-x border-t">
+            <table class="table-auto w-full">
+                <thead class="border-b">
+                    <tr class="bg-gray-100">
+                        <th class="text-center p-4 font-medium">ID</th>
+                        <th class="text-center p-4 font-medium">Nama</th>
+                        <th class="text-center p-4 font-medium">No.Telp</th>
+                        <th class="text-center p-4 font-medium">Total Servis</th>
+                        <th class="text-center p-4 font-medium">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="customerstable">
+                    
+                </tbody>
+            </table>
+        </div>
+        <div id="pagination" class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
+           
+        </div>
+    </div>
+
+    <div class="main-modal fixed w-full inset-0 z-50 overflow-hidden flex justify-center items-center animated fadeIn faster" style="background: rgba(0,0,0,.7);">
+        <div class="shadow-lg modal-container bg-white w-4/12 md:max-w-11/12 mx-auto rounded-xl shadow-lg z-50 overflow-y-auto">
+            <div class="modal-content py-4 text-left px-6">
+                <!--Body-->
+                <div class="my-5 mr-5 ml-5 flex justify-center">
+                    <form method="POST" class="w-full" id="addcus">
+                        <div class="">
+                            <input type="hidden" name="cusid" id="cusid">
+                            <div class="">
+                                <label for="name" class="text-md text-gray-600">Nama</label>
+                            </div>
+                            <div class="">
+                                <input type="text" id="name" autocomplete="off" name="name" class="h-3 p-6 w-full border-2 border-gray-300 mb-5 rounded-md">
+                            </div>
+                            <div class="">
+                                <label for="no_telp" class="text-md text-gray-600">No.Telp / WhatsApp</label>
+                            </div>
+                            <div class="">
+                                <input type="text" id="no_telp" autocomplete="off" name="no_telp" class="h-3 p-6 w-full border-2 border-gray-300 mb-5 rounded-md">
+                            </div>
+                        </div>
+                        <div class="flex justify-end pt-2 space-x-14">
+                            <button type="button" class="px-4 bg-gray-200 p-3 rounded text-black hover:bg-gray-300 font-semibold" onclick="modalClose()">Cancel</button>
+                            <button type="submit" class="px-4 bg-blue-500 p-3 ml-3 rounded-lg text-white hover:bg-blue-600">Confirm</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const modal = document.querySelector('.main-modal');
+    const addForm = document.getElementById('addcus');
+    const messager = document.getElementById('messager');
+    const message = document.getElementById('toast-message');
+
+    // Initialize modal as hidden
+    modal.style.display = 'none';
+
+    const modalClose = () => {
+        modal.classList.remove('fadeIn');
+        modal.classList.add('fadeOut');
+        addForm.reset();
+        modal.style.display = 'none';
+    };
+
+    const closeToast = () =>{
+        document.getElementById('messager').style.display = 'none';
+    }
+
+    const openModal = () => {
+        modal.classList.remove('fadeOut');
+        modal.classList.add('fadeIn');
+        modal.style.display = 'flex'
+    };
+
+    // Open modal on button click
+    document.querySelector('button[onclick="openModal()"]').addEventListener('click', () => {
+        openModal;
+        addForm.reset();
+    });
+
+    // Handle form submission
+    addForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const user = new FormData(e.target);
+        const id = user.get('cusid');
+        const name = user.get('name');
+        const no_telp = user.get('no_telp');
+
+        const usersend = {
+            id,
+            name,
+            no_telp
+        };
+
+        const url = id ? '/auth/customers/' + id : '/auth/customers';
+        const method = id ? 'PUT' : 'POST';
+
+        try {
+            const res = await fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(usersend)
+            });
+
+            const response = await res.json();
+
+            if (res.ok) {
+                messager.classList.add('bg-green-500');
+                messager.classList.remove('invisible');
+                message.innerHTML = response.message;
+                addForm.reset();
+                location.reload(); // Reload the page after 1.5 seconds
+            } else {
+                messager.classList.add('bg-red-500');
+                messager.classList.remove('invisible');
+                message.innerHTML = response.message;
+            }
+        } catch (error) {
+            messager.classList.add('bg-red-500');
+            messager.classList.remove('invisible');
+            message.innerHTML = 'Error: ' + error.message;
+        }
+    });
+
+    window.onclick = function (event) {
+        if (event.target == modal) modalClose();
+    }
+
+    async function editListener(name){
+        try {
+            const res = await fetch('/auth/customers/' + name);
+            const data = await res.json();
+
+            openModal();
+            
+            document.getElementById('cusid').value = name;
+            document.getElementById('name').value = data[0].name;
+            document.getElementById('no_telp').value = data[0].no_telp;
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
+    }
+    function deleteListener(id){
+        try {
+            fetch('/auth/customers/' + id, {
+                method: 'DELETE'
+            }).then(async (res) => {
+                const response = await res.json();
+                if (res.ok) {
+                    location.reload();
+                } else {
+                    messager.classList.add('bg-red-500')
+                    message.innerHTML = response.message;
+                }
+            });
+        } catch (error) {
+            console.error('Error deleting user:', error);
+        }
+    }
+    
+    document.getElementById('search').addEventListener('input', function() {
+        searchCustomers(this.value, 1);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        searchCustomers(document.getElementById('search').value, 1);
+    })
+    
+    async function searchCustomers(name, page) {
+        const response = await fetch(`/auth/customers/cust?name=${encodeURIComponent(name)}&page=${page}`);
+        const data = await response.json();
+
+        // Clear the existing table rows
+        const tableBody = document.getElementById('customerstable');
+        tableBody.innerHTML = '';
+
+        // Update the table with new results
+        data.customers.forEach(customer => {
+            const row = document.createElement('tr');
+            row.className = 'border-b hover:bg-gray-50';
+
+            row.innerHTML = `
+                <td class="p-4 text-center">${customer.id}</td>
+                <td class="p-4 text-center">${customer.name}</td>
+                <td class="p-4 text-center">${customer.no_telp}</td>
+                <td class="p-4 text-center">${customer.total_service}x</td>
+                <td class="p-4 space-x-2 text-center">
+                    <button class="bg-cyan-400 hover:bg-cyan-500 rounded p-1 w-6 h-6" onclick="editListener('${customer.id}')">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M3 17.46v3.04c0 .28.22.5.5.5h3.04c.13 0 .26-.05.35-.15L17.81 9.94l-3.75-3.75L3.15 17.1c-.1.1-.15.22-.15.36M20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83l3.75 3.75z"/>
+                        </svg>  
+                    </button>
+                    <button class="bg-red-500 hover:bg-red-600 rounded p-1 w-6 h-6" onclick="deleteListener('${customer.id}')">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2zM18 4h-2.5l-.71-.71c-.18-.18-.44-.29-.7-.29H9.91c-.26 0-.52.11-.7.29L8.5 4H6c-.55 0-1 .45-1 1s.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1"/>
+                        </svg> 
+                    </button>
+                    <button onclick="window.open('https://api.whatsapp.com/send?phone=${customer.no_telp}')" class="bg-green-400 hover:bg-green-500 rounded p-1 w-6 h-6">
+                        <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <path fill="currentColor" fill-rule="evenodd" d="M12 4a8 8 0 0 0-6.895 12.06l.569.718-.697 2.359 2.32-.648.379.243A8 8 0 1 0 12 4ZM2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10a9.96 9.96 0 0 1-5.016-1.347l-4.948 1.382 1.426-4.829-.006-.007-.033-.055A9.958 9.958 0 0 1 2 12Z" clip-rule="evenodd"/>
+                            <path fill="currentColor" d="M16.735 13.492c-.038-.018-1.497-.736-1.756-.83a1.008 1.008 0 0 0-.34-.075c-.196 0-.362.098-.49.291-.146.217-.587.732-.723.886-.018.02-.042.045-.057.045-.013 0-.239-.093-.307-.123-1.564-.68-2.751-2.313-2.914-2.589-.023-.04-.024-.057-.024-.057.005-.021.058-.074.085-.101.08-.079.166-.182.249-.283l.117-.14c.121-.14.175-.25.237-.375l.033-.066a.68.68 0 0 0-.02-.64c-.034-.069-.65-1.555-.715-1.711-.158-.377-.366-.552-.655-.552-.027 0 0 0-.112.005-.137.005-.883.104-1.213.311-.35.22-.94.924-.94 2.16 0 1.112.705 2.162 1.008 2.561l.041.06c1.161 1.695 2.608 2.951 4.074 3.537 1.412.564 2.081.63 2.461.63.16 0 .288-.013.4-.024l.072-.007c.488-.043 1.56-.599 1.804-1.276.192-.534.243-1.117.115-1.329-.088-.144-.239-.216-.43-.308Z"/>
+                        </svg>  
+                    </button>
+                </td>
+            `;
+
+            tableBody.appendChild(row);
+        });
+
+        // Update pagination
+        updatePagination(data.currentPage, data.totalPage);
+    }
+
+    function updatePagination(currentPage, totalPage) {
+        const paginationContainer = document.getElementById('pagination');
+        paginationContainer.innerHTML = '';
+
+        const span = document.createElement('span');
+        span.className = 'text-xs xs:text-sm text-gray-900';
+        span.textContent = `Showing page ${currentPage} of ${totalPage} pages`;
+        paginationContainer.appendChild(span);
+
+        const paginationControls = document.createElement('div');
+        paginationControls.className = 'inline-flex mt-2 xs:mt-0 space-x-2';
+
+        if (currentPage > 1) {
+            const prevButton = document.createElement('a');
+            prevButton.href = '#';
+            prevButton.className = 'text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded';
+            prevButton.textContent = 'Prev';
+            prevButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                searchCustomers(document.getElementById('search').value, currentPage - 1);
+            });
+            paginationControls.appendChild(prevButton);
+        }
+
+        if (currentPage < totalPage) {
+            const nextButton = document.createElement('a');
+            nextButton.href = '#';
+            nextButton.className = 'text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded';
+            nextButton.textContent = 'Next';
+            nextButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                searchCustomers(document.getElementById('search').value, currentPage + 1);
+            });
+            paginationControls.appendChild(nextButton);
+        }
+
+        paginationContainer.appendChild(paginationControls);
+    }
+
+
+</script>
+<%- include('template/footer') %>

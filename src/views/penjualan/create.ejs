@@ -1,0 +1,547 @@
+<%- include('../template/template') %>
+<div class="container mx-auto w-full px-4">
+    <div class="text-sm text-white rounded-md shadow-lg hidden" role="alert" id="messager">
+        <div class="flex p-4">
+          <span id="toast-message" class="text-white"></span>
+          <div class="ml-auto">
+            <button type="button" class="inline-flex flex-shrink-0 justify-center items-center h-4 w-4 rounded-md text-white/[.5] hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-800 focus:ring-red-500 transition-all text-sm ml-2" onclick="closeToast()">
+              <span class="sr-only">Close</span>
+              <svg class="w-3.5 h-3.5" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0.92524 0.687069C1.126 0.486219 1.39823 0.373377 1.68209 0.373377C1.96597 0.373377 2.2382 0.486219 2.43894 0.687069L8.10514 6.35813L13.7714 0.687069C13.8701 0.584748 13.9882 0.503105 14.1188 0.446962C14.2494 0.39082 14.3899 0.361248 14.5321 0.360026C14.6742 0.358783 14.8151 0.38589 14.9468 0.439762C15.0782 0.493633 15.1977 0.573197 15.2983 0.673783C15.3987 0.774389 15.4784 0.894026 15.5321 1.02568C15.5859 1.15736 15.6131 1.29845 15.6118 1.44071C15.6105 1.58297 15.5809 1.72357 15.5248 1.85428C15.4688 1.98499 15.3872 2.10324 15.2851 2.20206L9.61883 7.87312L15.2851 13.5441C15.4801 13.7462 15.588 14.0168 15.5854 14.2977C15.5831 14.5787 15.4705 14.8474 15.272 15.046C15.0735 15.2449 14.805 15.3574 14.5244 15.3599C14.2437 15.3623 13.9733 15.2543 13.7714 15.0591L8.10514 9.38812L2.43894 15.0591C2.23704 15.2543 1.96663 15.3623 1.68594 15.3599C1.40526 15.3574 1.13677 15.2449 0.938279 15.046C0.739807 14.8474 0.627232 14.5787 0.624791 14.2977C0.62235 14.0168 0.730236 13.7462 0.92524 13.5441L6.59144 7.87312L0.92524 2.20206C0.724562 2.00115 0.611816 1.72867 0.611816 1.44457C0.611816 1.16047 0.724562 0.887983 0.92524 0.687069Z" fill="currentColor"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow-md border mt-4">
+        <div class="mb-4">
+            <div class="flex items-center justify-between">
+                <label for="invoice" class="text-sm font-medium text-gray-700"></label>
+                <div class="px-4 py-2 space-x-2 flex">
+                    <div class="">
+                        <input type="text" id="search_nama" name="invoice" class="w-64 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ml-2" placeholder="cari dengan nama">
+                        <div id="componentOptions" class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg hidden max-h-60 overflow-y-auto max-w-fit">
+                            <!-- Options will be inserted here -->
+                        </div>
+                    </div>
+                    <div class="">
+                        <input type="text" id="search_kd" name="invoice" class="w-64 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ml-2" placeholder="cari dengan kode">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="w-full border-t-2 border-gray-300 my-4">
+
+        <table class="min-w-full bg-white">
+            <thead>
+                <tr>
+                    <th class="py-2 px-4 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No.</th>
+                    <th class="py-2 px-4 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                    <th class="py-2 px-4 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Harga</th>
+                    <th class="py-2 px-4 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">QTY</th>
+                    <th class="py-2 px-4 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sub Total</th>
+                    <th class="py-2 px-4 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="storedItemsTableBody">
+                <!-- Rows will be populated by JavaScript -->
+            </tbody>
+        </table>        
+        <div class="mt-6 flex flex-wrap justify-between items-start">
+            <!-- Left Section - Select Elements -->
+            <div class="flex flex-col space-y-8 mt-6">
+                <div class="relative w-64" id="custom-select-container">
+                    <input type="text" id="select-input" class="w-full p-2 pr-8 text-left bg-white border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Customer">
+                    <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                      <svg class="w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                      </svg>
+                    </span>
+                    <div id="options-container" class="absolute z-10 hidden w-full mt-1 bg-white rounded-md shadow-lg">
+                      <ul class="py-1 overflow-auto text-base rounded-md max-h-60 focus:outline-none sm:text-sm">
+                        <!-- Options will be inserted here by JavaScript -->
+                      </ul>
+                    </div>
+                </div>
+        
+                <div class="flex items-center space-x-4">
+                    <select id="kasir" class="w-full p-2 pr-8 text-left bg-white border rounded-md shadow-sm focus:outline-none">
+                        <option selected disabled class="">Pilih Kasir</option>
+                        <!-- Other options -->
+                    </select>
+                </div>
+            </div>
+        
+            <!-- Right Section - Total and Payment -->
+            <div class="flex flex-col space-y-4 items-end">
+                <div class="flex justify-between w-full">
+                    <div class="text-sm text-gray-500 w-1/2">Total:</div>
+                    <div class="text-sm font-bold text-gray-900 w-1/2 text-right" id="total"> 300000</div>
+                </div>
+                <div class="flex justify-between w-full">
+                    <div class="text-sm text-red-500 w-1/2">Bayar:</div>
+<<<<<<< HEAD
+                    <input type="text" class="px-4 py-2 border rounded w-1/2 text-right" placeholder="" id="bayar">
+=======
+                    <input type="text" class="px-4 py-2 border rounded w-1/2 text-right" placeholder="" id="bayar" oninput="this.value = formatDaNumber(this.value)">
+>>>>>>> 7e5e88e (web only)
+                </div>
+                <div class="flex justify-between w-full">
+                    <div class="text-sm text-gray-500 w-1/2">Kembali:</div>
+                    <div class="text-sm text-gray-900 w-1/2 text-right" id="kembali"></div>
+                </div>
+                <button class="px-4 py-2 bg-blue-500 text-white rounded w-full mt-4" onclick="savePembelian()" id="simpan">Simpan Payment</button>
+            </div>
+            
+        </div>        
+    </div>
+
+</div>
+
+<script>
+    const closeToast = () =>{
+        document.getElementById('messager').style.display = 'none';
+    }
+    const byr = document.getElementById('bayar');
+    const total = document.getElementById('total');
+    const simpan = document.getElementById('simpan');
+    const kd = document.getElementById('search_kd');
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const selectInput = document.getElementById('select-input');
+        const optionsContainer = document.getElementById('options-container');
+        const optionsList = optionsContainer.querySelector('ul');
+
+        const getCustomers = async () => {
+            const response = await fetch('/auth/customers/get');
+            const data = await response.json();
+            return Object.values(data);
+        }
+
+        function populateOptions(customers, filter = '') {
+            const defaultCustomer = { id: 0, name: "Umum", no_telp: "" };
+            customers.unshift(defaultCustomer);
+
+            optionsList.innerHTML = '';
+            customers.filter(cust => 
+                cust.name.toLowerCase().includes(filter.toLowerCase()) ||
+                cust.no_telp.includes(filter)
+            ).forEach(cust => {
+                const li = document.createElement('li');
+                li.textContent = `${cust.name} (${cust.no_telp})`;
+                li.className = 'py-2 pl-3 pr-9 text-gray-900 cursor-pointer select-none hover:bg-indigo-600 hover:text-white';
+                li.dataset.id = cust.id; // Store customer ID in data attribute
+                li.addEventListener('click', () => {
+                    selectInput.value = `${cust.name} (${cust.no_telp})`;
+                    optionsContainer.classList.add('hidden');
+                    // Optionally, store the selected customer ID somewhere
+                    selectInput.dataset.selectedId = cust.id;
+                });
+                optionsList.appendChild(li);
+            });
+        };
+
+        getCustomers().then(customers => {
+            populateOptions(customers);
+
+            // Show options when the input is focused
+            selectInput.addEventListener('focus', () => {
+                optionsContainer.classList.remove('hidden');
+            });
+
+            // Filter options based on input
+            selectInput.addEventListener('input', (e) => {
+                populateOptions(customers, e.target.value);
+                optionsContainer.classList.remove('hidden');
+            });
+
+            // Hide options when clicking outside
+            document.addEventListener('click', (event) => {
+                if (!event.target.closest('#custom-select-container')) {
+                    optionsContainer.classList.add('hidden');
+<<<<<<< HEAD
+=======
+                    // optionsContainer.innerHTML = '';
+>>>>>>> 7e5e88e (web only)
+                }
+            });
+
+            // Prevent hiding options when clicking inside the container
+            optionsContainer.addEventListener('click', (event) => {
+                event.stopPropagation();
+            });
+        }).catch(error => {
+            console.error('Error fetching customer data:', error);
+        });
+
+
+        selectInput.addEventListener('focus', () => {
+            optionsContainer.classList.remove('hidden');
+        });
+
+        selectInput.addEventListener('input', (e) => {
+            populateOptions(e.target.value);
+            optionsContainer.classList.remove('hidden');
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!event.target.closest('#custom-select-container')) {
+                optionsContainer.classList.add('hidden');
+            }
+        });
+        fetchSuppliers();
+    });
+
+    async function fetchSuppliers() {
+        try {
+            const response = await fetch(`/auth/users/get`);
+            const data = await response.json();
+
+            const supplierSelect = document.getElementById('kasir');
+
+            // Ensure data is an array and has content
+            if (Array.isArray(data) && data.length > 0) {
+                data.forEach(supplier => {
+                    if (supplier.id && supplier.name) {
+                        const option = document.createElement('option');
+                        option.value = supplier.id; 
+                        option.textContent = supplier.name;
+                        supplierSelect.appendChild(option);
+                    } else {
+                        console.warn('Supplier missing id or name:', supplier);
+                    }
+                });
+            } else {
+                console.warn('No suppliers found or data is not an array.');
+            }
+        } catch (error) {
+            console.error('Error fetching suppliers:', error);
+        }
+    }
+
+    kd.focus();
+    kd.addEventListener('keydown', async (event) => {
+        if (event.key === 'Tab'){
+            event.preventDefault();
+            kd.focus();
+        }
+
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            const data = await searchbyKd(kd.value);
+            if(data.length > 0){
+                selectItem(data[0].id, data[0].name, data[0].kd_barang, data[0].sell_price);
+                document.getElementById('search_kd').value = '';
+            }
+        }
+    })
+
+    document.getElementById('search_nama').addEventListener('input', async () => {
+        const name = document.getElementById('search_nama').value;
+        if(name.length = 0){
+            options.innerHTML = '';
+            options.classList.add('hidden');
+            return
+        }
+        const components = await searchComponents(name);
+
+        const options = document.getElementById('componentOptions');
+        options.innerHTML = '';
+        if (components.length > 0) {
+            components.forEach(component => {
+                const option = document.createElement('div');
+                option.textContent = `${component.name} (${component.kd_barang})`;
+                option.className = 'ml-2 px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm w-64';
+                option.addEventListener('click', () => {
+                    selectItem(component.id, component.name, component.kd_barang, component.sell_price);
+                    options.innerHTML = '';
+                    options.classList.add('hidden');
+                    document.getElementById('search_nama').value = '';
+                });
+                options.appendChild(option);
+            });
+            options.classList.remove('hidden');
+        } else {
+            options.classList.add('hidden');
+        }
+    });
+
+    document.addEventListener('click', function(event) {
+        const options = document.getElementById('componentOptions');
+        const searchInput = document.getElementById('search_nama');
+        
+        // Periksa apakah klik terjadi di luar options dan search input
+        if (!options.contains(event.target) && event.target !== searchInput) {
+            options.innerHTML = '';
+            options.classList.add('hidden');
+            searchInput.value = '';
+        }
+    })
+
+    async function searchbyKd(kd){
+        const response = await fetch(`/auth/components/searchkd/${kd}`);
+        const data = await response.json();
+        if (data.length < 1) {
+            document.getElementById('messager').classList.remove('hidden');
+            document.getElementById('messager').classList.add('bg-red-500');
+            document.getElementById('toast-message').innerHTML = 'Data tidak ditemukan';
+        }
+        return data
+    }
+
+    async function searchComponents(name){
+        const response = await fetch(`/auth/components/search/${name}`);
+        const data = await response.json();
+        return data
+    }
+
+    function selectItem(id, name, kode_barang, harga) {
+        const itemSaved = JSON.parse(localStorage.getItem('selectedItems')) || [];
+        const ifExist = itemSaved.find(item => item.id === id);
+        if (ifExist) {
+            updateQuantity(id, 1);
+        } else {
+            const item = {
+                id,
+                name,
+                kode_barang,
+                harga,
+                quantity: '1'
+            };
+            const storedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
+            storedItems.push(item);
+            localStorage.setItem('selectedItems', JSON.stringify(storedItems));
+        }
+
+        renderStoredItems();
+    }
+
+    function updateQuantity(id, quantityChange) {
+        const storedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
+        const updatedItems = storedItems.map(item => {
+            if (item.id === id) {
+                // Ensure we're working with numbers
+                const currentQuantity = parseInt(item.quantity, 10);
+                const change = parseInt(quantityChange, 10);
+                
+                // Calculate new quantity, ensuring it doesn't go below 1
+                const newQuantity = Math.max(1, currentQuantity + change);
+                
+                return { ...item, quantity: newQuantity };
+            }
+            return item;
+        });
+        
+        localStorage.setItem('selectedItems', JSON.stringify(updatedItems));
+        renderStoredItems();
+    }
+
+    function renderStoredItems() {
+        const storedItemsTableBody = document.getElementById('storedItemsTableBody');
+        const storedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
+
+        // Clear existing rows
+        storedItemsTableBody.innerHTML = '';
+
+        storedItems.forEach((item, index) => {
+            const row = document.createElement('tr');
+            row.className = 'border-b hover:bg-gray-50';
+
+            row.innerHTML = `
+                <td class="py-2 px-4 border-t border-gray-200">${index + 1}</td>
+                <td class="py-2 px-4 border-t border-gray-200">${item.name}</td>
+<<<<<<< HEAD
+                <td class="py-2 px-4 border-t border-gray-200">${item.harga}</td>
+                <td class="py-2 px-4 border-t border-gray-200">${item.quantity}</td>
+                <td class="py-2 px-4 border-t border-gray-200">
+                    <span class="subtotal" data-id="${item.id}">${item.harga * item.quantity}</span>
+=======
+                <td class="py-2 px-4 border-t border-gray-200">${formatDaNumber(item.harga)}</td>
+                <td class="py-2 px-4 border-t border-gray-200">${item.quantity}</td>
+                <td class="py-2 px-4 border-t border-gray-200">
+                    <span class="subtotal" data-id="${item.id}">${formatDaNumber(item.harga * item.quantity)}</span>
+>>>>>>> 7e5e88e (web only)
+                </td>
+                <td class="py-2 px-4 border-t border-gray-200 space-y-2">
+                    <div class="flex space-x-2">
+                        <button class="decrease-btn px-2 py-1 bg-blue-400 text-white rounded w-6" data-id="${item.id}">-</button>
+                        <button class="increase-btn px-2 py-1 bg-blue-400 text-white rounded w-6" data-id="${item.id}">+</button>
+                    </div>
+                    <button class="delete-btn px-2 py-1 bg-red-500 text-white rounded" data-id="${item.id}">Delete</button>
+                </td>
+            `;
+
+            storedItemsTableBody.appendChild(row);
+            row.querySelector('.decrease-btn').addEventListener('click', () => updateQuantity(item.id, -1));
+            row.querySelector('.increase-btn').addEventListener('click', () => updateQuantity(item.id, 1));
+            row.querySelector('.delete-btn').addEventListener('click', () => deleteItem(item.id));
+        });
+
+        updateTotal();
+    }
+
+    function updateTotal() {
+        const subtotals = document.querySelectorAll('.subtotal');
+<<<<<<< HEAD
+        const total = Array.from(subtotals).reduce((sum, subtotal) => sum + parseFloat(subtotal.textContent), 0);
+        document.getElementById('total').textContent = total;
+=======
+        const total = Array.from(subtotals).reduce((sum, subtotal) => sum + parseInt(turnBackDaNumber(subtotal.textContent)), 0);
+        document.getElementById('total').textContent = formatDaNumber(total);
+>>>>>>> 7e5e88e (web only)
+    }
+
+    function deleteItem(id) {
+        const storedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
+        const updatedItems = storedItems.filter(item => item.id !== id);
+
+        localStorage.setItem('selectedItems', JSON.stringify(updatedItems));
+        renderStoredItems();
+    }
+
+    document.getElementById('bayar').addEventListener('input', () => {
+<<<<<<< HEAD
+        const bayar = parseFloat(document.getElementById('bayar').value);
+        const total = parseFloat(document.getElementById('total').textContent);
+        const kembalian = bayar - total;
+        if (kembalian >= 0) {
+            document.getElementById('kembali').textContent = kembalian;
+=======
+        const bayar = parseInt(turnBackDaNumber(document.getElementById('bayar').value));
+        const total = parseInt(turnBackDaNumber(document.getElementById('total').textContent));
+
+        const kembalian = bayar - total;
+        console.log(kembalian)
+        if (kembalian >= 0) {
+            document.getElementById('kembali').textContent = formatDaNumber(kembalian);
+>>>>>>> 7e5e88e (web only)
+        }
+    });
+
+    // Call this function on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        function updateButtonStatus() {
+            const byrValue = parseFloat(byr.value.replace(/[^\d.-]/g, ''));
+            const totalValue = parseFloat(total.textContent.replace(/[^\d.-]/g, ''));
+            
+            simpan.disabled = isNaN(byrValue) || byrValue < totalValue || byrValue < 0;
+        }
+
+        byr.addEventListener('input', updateButtonStatus);
+
+        updateButtonStatus();
+        renderStoredItems();
+        updateTotal();
+    });
+
+    async function savePembelian() {
+        const selectedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
+<<<<<<< HEAD
+        const totalAmount = parseFloat(document.getElementById('total').textContent);
+        const bayar = parseFloat(document.getElementById('bayar').value);
+=======
+        const totalAmount = parseInt(turnBackDaNumber(document.getElementById('total').textContent));
+        const bayar = parseInt(turnBackDaNumber(document.getElementById('bayar').value));
+>>>>>>> 7e5e88e (web only)
+        const cust = document.getElementById('select-input').dataset.selectedId;
+        const kasir = document.getElementById('kasir').value;
+
+        if (bayar < totalAmount) {
+            document.getElementById('messager').classList.remove('hidden');
+            document.getElementById('messager').classList.add('bg-red-500');
+            document.getElementById('toast-message').innerHTML = 'Total pembelian harus lebih besar dari total bayar';
+            return;
+        }
+        // Validasi input
+        if (selectedItems.length === 0 || !cust || !kasir) {
+            document.getElementById('messager').classList.remove('hidden');
+            document.getElementById('messager').classList.add('bg-red-500');
+            document.getElementById('toast-message').innerHTML = 'Mohon lengkapi semua data pembelian';
+            return;
+        }
+
+        // Menyiapkan data untuk dikirim ke server
+        const requestData = {
+            customer_id: cust,
+            user_id: kasir,
+            biaya_total: totalAmount,
+            items: selectedItems.map(item => ({
+                komponen_id: item.id,
+                jumlah: item.quantity,
+                harga_satuan: item.harga
+            }))
+        };
+
+        const response = await fetch('/auth/penjualan', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData)
+        });
+
+        if (!response.ok) {
+            document.getElementById('messager').classList.remove('hidden');
+            document.getElementById('messager').classList.add('bg-red-500');
+            document.getElementById('toast-message').innerHTML = response.message;
+        } else {
+            window.location.href = '/auth/penjualan';
+        }
+
+        const result = await response.json();
+
+            // Bersihkan local storage dan reset form
+        localStorage.removeItem('selectedItems');
+        document.getElementById('invoice').value = '';
+        renderStoredItems(); // Fungsi untuk me-render ulang tabel item
+        updateTotal(); // Fungsi untuk memperbarui total
+    }
+
+<<<<<<< HEAD
+    document.getElementById('bayar').addEventListener('input', () => {
+        const bayar = parseFloat(document.getElementById('bayar').value);
+        const total = parseFloat(document.getElementById('total').textContent);
+        const kembalian = bayar - total;
+        if (kembalian >= 0) {
+            document.getElementById('kembali').textContent = kembalian;
+        }
+    });
+=======
+//    document.getElementById('bayar').addEventListener('input', () => {
+//       const bayar = parseFloat(document.getElementById('bayar').value);
+//        const total = parseFloat(document.getElementById('total').textContent);
+ //       const kembalian = bayar - total;
+  //      if (kembalian >= 0) {
+    //        document.getElementById('kembali').textContent = kembalian;
+      //  }
+  //  });
+>>>>>>> 7e5e88e (web only)
+
+    window.addEventListener('beforeunload', () => {
+        localStorage.removeItem('selectedItems');
+    });
+
+<<<<<<< HEAD
+=======
+    function formatDaNumber(price){
+      if (typeof price === 'number') {
+        return Intl.NumberFormat('id-ID').format(price);
+      }
+
+      let val = price.replace(/\D/g, '')
+      return Intl.NumberFormat('id-ID').format(val);
+    }
+
+    function turnBackDaNumber(price){
+      const rawValue = price.replace(/\./g, '');
+      const finalPrice = parseInt(rawValue, 10);
+
+      return finalPrice;
+    }
+
+
+>>>>>>> 7e5e88e (web only)
+</script>
+
+<%- include('../template/footer') %>
